@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>PVR-150 Metric Gallery · Choosing the best view of each metric</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F4F0EA; --paper2:#EFEAE1; --paper3:#E7E0D3;
+    --surface:#FBF9F4; --ink:#0E0E10; --ink2:#1C1C1F;
+    --muted:#6B6258; --muted2:#8A8278; --line:rgba(14,14,16,0.12); --line2:rgba(14,14,16,0.07);
+    --accent:#7A2E1F; --accent2:#B14A2E; --accent-bright:#D9714F;
+    --tint:#D9CFC1; --green:#2F6B4A;
+    --r-sm:6px; --r-md:10px; --r-lg:18px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--paper);font-family:'Inter',sans-serif;color:var(--ink);
+     -webkit-font-smoothing:antialiased;line-height:1.5}
+  .mono{font-family:'JetBrains Mono',monospace}
+  .fr{font-family:'Fraunces',serif}
+  em{font-family:'Fraunces',serif;font-style:italic;color:var(--accent)}
+  .wrap{max-width:1240px;margin:0 auto;padding:0 clamp(20px,5vw,56px)}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;
+     text-transform:uppercase;color:var(--muted);display:inline-flex;align-items:center;gap:11px}
+  .eyebrow::before{content:"";width:26px;height:1px;background:var(--muted2)}
+
+  /* top nav */
+  .nav{position:sticky;top:0;z-index:50;background:rgba(244,240,234,.86);
+     backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .nav .wrap{display:flex;align-items:center;gap:18px;height:58px}
+  .nav .logo{display:flex;align-items:center;color:var(--ink);height:22px}
+  .nav .logo svg{height:22px;width:auto;display:block}
+  .nav .links{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}
+  .nav .links a{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;
+     text-transform:uppercase;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:999px}
+  .nav .links a:hover{color:var(--ink);background:var(--paper2)}
+
+  /* hero / intro */
+  .hero{padding:clamp(48px,8vw,104px) 0 clamp(36px,5vw,64px)}
+  .hero h1{font-family:'Fraunces',serif;font-weight:300;font-size:clamp(34px,5.4vw,62px);
+     line-height:1.03;letter-spacing:-.03em;max-width:17ch;margin:18px 0 0}
+  .hero .lead{font-size:clamp(15px,1.5vw,18px);color:var(--muted);max-width:62ch;margin-top:24px;line-height:1.65}
+  .hero .lead b{color:var(--ink);font-weight:500}
+
+  .howto{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--line);
+     border-radius:var(--r-lg);overflow:hidden;background:var(--surface);margin-top:44px}
+  .howto .cell{padding:24px 26px;border-right:1px solid var(--line)}
+  .howto .cell:last-child{border-right:none}
+  .howto .n{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:.1em}
+  .howto h4{font-family:'Fraunces',serif;font-weight:400;font-size:19px;margin:10px 0 7px;letter-spacing:-.01em}
+  .howto p{font-size:13px;color:var(--muted);line-height:1.55}
+
+  /* section shell */
+  section.metric{padding:clamp(56px,7vw,96px) 0;border-top:1px solid var(--line)}
+  .sec-head{display:flex;align-items:flex-start;gap:30px;flex-wrap:wrap}
+  .sec-head .left{flex:1;min-width:320px}
+  .sec-head h2{font-family:'Fraunces',serif;font-weight:300;font-size:clamp(26px,3.4vw,40px);
+     letter-spacing:-.025em;line-height:1.06;margin:14px 0 0}
+  .sec-head h2 .agree{display:block;font-size:13px;letter-spacing:.04em;color:var(--muted2);
+     font-family:'JetBrains Mono',monospace;text-transform:uppercase;margin-top:10px;font-weight:400}
+  .oneline{font-size:clamp(15px,1.5vw,18px);line-height:1.6;max-width:54ch;margin-top:20px;color:var(--ink2)}
+  .oneline b{color:var(--accent);font-weight:500}
+  .qcard{flex:0 0 300px;background:var(--ink);color:var(--paper);border-radius:var(--r-lg);padding:22px 24px}
+  .qcard .lab{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;
+     text-transform:uppercase;color:var(--accent-bright)}
+  .qcard .q{font-family:'Fraunces',serif;font-size:21px;line-height:1.28;margin-top:12px;font-weight:300}
+  .qcard .map{margin-top:18px;padding-top:16px;border-top:1px solid rgba(244,240,234,.18);
+     font-size:12px;color:#cfc7ba;line-height:1.5}
+  .qcard .map b{color:var(--paper);font-weight:500}
+
+  .block-label{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;
+     text-transform:uppercase;color:var(--muted);margin:46px 0 16px;display:flex;align-items:center;gap:12px}
+  .block-label::after{content:"";flex:1;height:1px;background:var(--line)}
+  .block-label .tag{background:var(--paper2);border:1px solid var(--line);border-radius:999px;
+     padding:3px 10px;color:var(--muted2);font-size:10px}
+
+  /* data + original two-column */
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+  @media(max-width:880px){.twocol{grid-template-columns:1fr}}
+  .panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:22px 24px}
+  .panel .ptitle{font-family:'Fraunces',serif;font-size:18px;font-weight:400;letter-spacing:-.01em;margin-bottom:4px}
+  .panel .psub{font-size:12.5px;color:var(--muted);line-height:1.5;margin-bottom:16px}
+
+  table.data{width:100%;border-collapse:collapse;font-size:12.5px}
+  table.data th{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.06em;
+     text-transform:uppercase;color:var(--muted2);text-align:right;padding:7px 8px;border-bottom:1px solid var(--line);font-weight:500}
+  table.data th:first-child,table.data td:first-child{text-align:left}
+  table.data td{padding:8px;border-bottom:1px solid var(--line2);text-align:right;font-variant-numeric:tabular-nums}
+  table.data td:first-child{color:var(--ink);font-weight:500}
+  table.data td.acc{color:var(--accent);font-weight:600}
+  table.data tr:last-child td{border-bottom:none}
+  .src{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--muted2);margin-top:12px;letter-spacing:.04em}
+
+  /* option grid */
+  .opts{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
+  @media(max-width:880px){.opts{grid-template-columns:1fr}}
+  .opt{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);
+     padding:20px 22px 18px;display:flex;flex-direction:column;transition:border-color .2s,box-shadow .2s}
+  .opt.sel{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+  .opt .ohead{display:flex;align-items:center;gap:10px;margin-bottom:3px}
+  .opt .obadge{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+     color:var(--accent);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+  .opt .obadge .d{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--accent);margin-right:6px;vertical-align:middle}
+  .opt h3{font-family:'Fraunces',serif;font-weight:400;font-size:18px;letter-spacing:-.01em;line-height:1.15;margin:8px 0 2px}
+  .opt .fig{width:100%;height:auto;display:block;margin:10px 0 4px}
+  .opt .figcap{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.1em;
+     text-transform:uppercase;color:var(--muted2);margin-bottom:12px}
+  .opt .edu{font-size:13px;color:var(--muted);line-height:1.6;flex:1}
+  .opt .edu b{color:var(--ink);font-weight:500}
+  .opt .pickbtn{margin-top:16px;align-self:flex-start;font-family:'JetBrains Mono',monospace;
+     font-size:11px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;
+     border:1px solid var(--ink);background:transparent;color:var(--ink);border-radius:999px;padding:8px 16px;transition:.15s}
+  .opt .pickbtn:hover{background:var(--paper2)}
+  .opt.sel .pickbtn{background:var(--accent);border-color:var(--accent);color:var(--paper)}
+
+  .caveat{margin-top:30px;background:var(--paper2);border:1px solid var(--line);border-left:3px solid var(--accent);
+     border-radius:var(--r-md);padding:18px 22px}
+  .caveat .ct{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.12em;
+     text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+  .caveat p{font-size:13.5px;color:var(--ink2);line-height:1.6}
+  .caveat p+p{margin-top:8px}
+
+  /* metric map */
+  .mapwrap{margin-top:40px;border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;background:var(--surface)}
+  .maprow{display:grid;grid-template-columns:96px 1.4fr 1fr 120px;gap:0;border-bottom:1px solid var(--line);align-items:center}
+  .maprow:last-child{border-bottom:none}
+  .maprow.head{background:var(--paper2)}
+  .maprow.head>div{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.1em;
+     text-transform:uppercase;color:var(--muted2);padding:11px 16px}
+  .maprow>div{padding:15px 16px;font-size:13.5px}
+  .maprow .mnum{font-family:'JetBrains Mono',monospace;color:var(--accent);font-size:12px;letter-spacing:.04em}
+  .maprow .mname{font-weight:500;color:var(--ink)}
+  .maprow .mname small{display:block;color:var(--muted);font-weight:400;font-size:12px;margin-top:2px;line-height:1.4}
+  .maprow .mhead{font-family:'Fraunces',serif;font-size:23px;color:var(--ink);font-weight:400;text-align:right}
+  .maprow .mhead.none{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);text-transform:uppercase;letter-spacing:.06em}
+  @media(max-width:760px){.maprow{grid-template-columns:60px 1fr;}.maprow .mwhat,.maprow .mhead{display:none}}
+
+  /* floating selection panel */
+  .selfab{position:fixed;right:22px;bottom:22px;z-index:80;background:var(--ink);color:var(--paper);
+     border:none;border-radius:999px;padding:13px 20px;font-family:'JetBrains Mono',monospace;font-size:12px;
+     letter-spacing:.06em;cursor:pointer;box-shadow:0 8px 30px rgba(40,30,20,.28);display:flex;align-items:center;gap:9px}
+  .selfab .cnt{background:var(--accent-bright);color:var(--ink);border-radius:999px;padding:1px 8px;font-weight:500}
+  .selpanel{position:fixed;right:22px;bottom:76px;z-index:80;width:min(380px,calc(100vw - 44px));
+     background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:0 18px 50px rgba(40,30,20,.26);
+     padding:20px 22px;display:none}
+  .selpanel.open{display:block}
+  .selpanel h4{font-family:'Fraunces',serif;font-weight:400;font-size:19px;margin-bottom:4px}
+  .selpanel .sp-sub{font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.5}
+  .selpanel .sp-list{font-size:13px;max-height:42vh;overflow:auto}
+  .selpanel .sp-m{padding:9px 0;border-bottom:1px solid var(--line2)}
+  .selpanel .sp-m .mt{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;
+     text-transform:uppercase;color:var(--muted2)}
+  .selpanel .sp-m .picks{color:var(--ink);margin-top:3px}
+  .selpanel .sp-m .picks .none{color:var(--muted2);font-style:italic}
+  .selpanel .sp-actions{display:flex;gap:9px;margin-top:16px}
+  .selpanel button.act{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+     cursor:pointer;border-radius:999px;padding:9px 15px;border:1px solid var(--ink);background:transparent;color:var(--ink)}
+  .selpanel button.act.primary{background:var(--ink);color:var(--paper)}
+  .selpanel .copied{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--green);margin-top:10px;display:none}
+
+  footer{border-top:1px solid var(--line);padding:40px 0 70px;margin-top:30px}
+  footer .ft{font-size:12.5px;color:var(--muted);line-height:1.6;max-width:70ch}
+  footer .sig{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;
+     text-transform:uppercase;color:var(--muted2);margin-top:18px}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <div class="wrap">
+    <span class="logo" id="navlogo"></span>
+    <nav class="links">
+      <a href="#map">Map</a>
+      <a href="#m1">01 Chemistry</a>
+      <a href="#m2">02 Ranking</a>
+      <a href="#m3">03 Precision</a>
+      <a href="#m4">04 Stability</a>
+      <a href="#m5">05 Regions</a>
+    </nav>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">PVR-150 Baseline · Visualization workshop</span>
+    <h1>Every metric, every way to <em>show it.</em></h1>
+    <p class="lead">The PVR-150 report carries five validation metrics, but in the source document nearly all of them
+      are presented as <b>dense tables</b> built for data scientists. This page exists to fix that. For each metric you'll
+      see the <b>original data</b>, <b>how the report displayed it</b>, and several <b>alternative views</b> rebuilt in the
+      Tastry house style, each with a plain-English explanation aimed at executives. Tell me which view of each metric reads
+      best to you, and I'll assemble those into the finalized one-page report.</p>
+
+    <div class="howto">
+      <div class="cell"><div class="n">01</div><h4>Read the metric map first</h4>
+        <p>It shows how the five framework metrics line up with the report's headline numbers, and where a number is doing double duty or missing entirely.</p></div>
+      <div class="cell"><div class="n">02</div><h4>Compare the views</h4>
+        <p>Each option is the same real data shown a different way. The caption under each explains what you're looking at and who it's for.</p></div>
+      <div class="cell"><div class="n">03</div><h4>Pick your favorites</h4>
+        <p>Click <b>Use this view</b> on any option. Your picks collect in the button at the bottom-right; copy them and send them back to me.</p></div>
+    </div>
+  </div>
+</header>
+
+<!-- METRIC MAP -->
+<section class="metric" id="map" style="border-top:none;padding-top:8px">
+  <div class="wrap">
+    <span class="eyebrow">Orientation</span>
+    <h2 class="fr" style="font-weight:300;font-size:clamp(24px,3vw,34px);letter-spacing:-.02em;margin:12px 0 0">How the five metrics map to the report's headline numbers</h2>
+    <p class="oneline" style="color:var(--muted);max-width:74ch">The first page of the report shows five big callout numbers. They do <b>not</b> line up one-to-one with the five framework metrics. Metric&nbsp;3 produces two of the headline numbers, and Metric&nbsp;4 produces none, it is a quality-control check rather than a single score. That mismatch is a common source of confusion.</p>
+
+    <div class="mapwrap">
+      <div class="maprow head"><div>Framework</div><div>Metric &amp; what it tests</div><div class="mwhat">Plain meaning</div><div style="text-align:right">Headline #</div></div>
+      <div class="maprow"><div class="mnum">#1</div>
+        <div class="mname">Chemical-Sensory Correlation<small>Do similar chemistries get similar liking?</small></div>
+        <div class="mwhat">Chemistry is a valid input to taste prediction.</div>
+        <div class="mhead">20.4%</div></div>
+      <div class="maprow"><div class="mnum">#2</div>
+        <div class="mname">Predictive Rank Concordance<small>Are liked products ranked near the top?</small></div>
+        <div class="mwhat">The model prioritizes the right products.</div>
+        <div class="mhead">0.928</div></div>
+      <div class="maprow"><div class="mnum">#3</div>
+        <div class="mname">Precision &amp; Recall at hedonic threshold<small>When it recommends, is it right? Does it cover everyone?</small></div>
+        <div class="mwhat">Beats guessing, and works for nearly every palate.</div>
+        <div class="mhead">+16 pts<br><span style="font-size:15px">98-100%</span></div></div>
+      <div class="maprow"><div class="mnum">#4</div>
+        <div class="mname">Cross-Validation Stability<small>Does it hold up on palates it never saw?</small></div>
+        <div class="mwhat">Generalizes instead of memorizing. Read from consistency, not one number.</div>
+        <div class="mhead none">no headline #</div></div>
+      <div class="maprow"><div class="mnum">#5</div>
+        <div class="mname">Population Segmentation<small>Are regional tastes measurably different?</small></div>
+        <div class="mwhat">Markets can be told apart by predicted palate.</div>
+        <div class="mhead">3 markets</div></div>
+    </div>
+  </div>
+</section>
+
+<main id="sections"></main>
+
+<footer>
+  <div class="wrap">
+    <p class="ft">Every number on this page is taken directly from the <b>PVR-150 Baseline</b> report. No values are invented.
+      Where a view is derived (for example, a confidence interval computed from a reported t-statistic), the figure caption says so.
+      Alternative views are styled per the Tastry website design specification: warm paper, ink line-work, a single wine accent,
+      Fraunces / Inter / JetBrains&nbsp;Mono.</p>
+    <p class="sig">Tastry · Predictive Viability Report · metric visualization workshop</p>
+  </div>
+</footer>
+
+<button class="selfab" id="selfab">My selections <span class="cnt" id="selcnt">0</span></button>
+<div class="selpanel" id="selpanel">
+  <h4 class="fr">Your chosen views</h4>
+  <p class="sp-sub">Pick the best view for each metric, then copy the summary and send it back so I can build the final report.</p>
+  <div class="sp-list" id="splist"></div>
+  <div class="sp-actions">
+    <button class="act primary" id="copybtn">Copy summary</button>
+    <button class="act" id="clearbtn">Clear all</button>
+  </div>
+  <div class="copied" id="copied">Copied to clipboard.</div>
+</div>
+
+<script>
+/* ============================ logo ============================ */
+document.getElementById('navlogo').innerHTML =
+  '<span style="font-family:Fraunces,serif;font-weight:400;font-size:22px;letter-spacing:-.02em;color:var(--ink)">tastry</span>';
+
+/* ============================ svg helpers ============================ */
+const NS='http://www.w3.org/2000/svg';
+const C={ink:'#0E0E10',muted:'#6B6258',muted2:'#8A8278',accent:'#7A2E1F',accentB:'#B14A2E',
+  tint:'#D9CFC1',green:'#2F6B4A',paper:'#F4F0EA',surface:'#FBF9F4',line:'rgba(14,14,16,0.12)'};
+const MONO='JetBrains Mono', FRAU='Fraunces';
+function E(t,a){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);return e;}
+function add(p,t,a){const e=E(t,a);p.appendChild(e);return e;}
+function T(p,x,y,s,o={}){const e=E('text',Object.assign({x,y},o));e.textContent=s;p.appendChild(e);return e;}
+function mono(extra={}){return Object.assign({'font-family':MONO,'font-size':9,fill:C.muted2,'letter-spacing':'.5'},extra);}
+function svg(vb){const s=E('svg',{viewBox:vb,class:'fig',preserveAspectRatio:'xMidYMid meet'});return s;}
+function gridX(s,x0,x1,ys,ticks,fmt,ylab){ticks.forEach(t=>{const x=t.x;add(s,'line',{x1:x,y1:ys[0],x2:x,y2:ys[1],stroke:C.ink,opacity:.07,'stroke-width':1});T(s,x,ys[1]+15,fmt(t.v),mono({'text-anchor':'middle'}));});}
+
+/* ============================ data model ============================ */
+const METRICS=[
+{
+  id:'m1', num:'01', name:'Chemical-Sensory Correlation',
+  agree:'Agreement metric · Core Assumption Validation',
+  question:'Do chemically similar products produce more similar consumer liking?',
+  oneLine:'This is the foundation under everything else: it asks whether <b>chemistry is even a valid input</b> to predicting taste. If similar chemistries earn similar liking scores, the whole approach is justified.',
+  headline:'Headline number <b>20.4%</b> — the smaller liking gap among chemically similar products.',
+  data:{
+    sub:'Mean absolute difference in consumer liking score (scale 1–9) between product pairs, by how chemically similar the pair is. Smaller gap = chemistry tracks taste.',
+    cols:['Threshold','Similar pairs (n)','Dissimilar pairs (n)','Mean gap: similar','Mean gap: dissimilar','Reduction','p-value'],
+    rows:[
+      ['Conservative','6','294','1.770','2.225',{t:'20.4% lower',acc:1},'3.9e-39'],
+      ['Permissive','12','288','1.996','2.225',{t:'10.3% lower',acc:1},'1.6e-17'],
+    ],
+    src:'Source: PVR-150 report, Metric #1 table + Appendix C (Welch one-tailed t-test; t = -12.94 conservative, -8.48 permissive).'
+  },
+  original:{title:'As the report showed it',sub:'A grouped bar chart of mean liking gaps with ~95% confidence-interval error bars, plus the table above. The exact CI values were not published with the data.',draw:o_m1},
+  options:[
+    {id:'A',title:'Paired bars, gap highlighted',cap:'FIG 1A · MEAN LIKING GAP BY CHEMICAL SIMILARITY',draw:m1_A,
+     edu:'The classic view: <b>similar pairs sit lower than dissimilar pairs</b> at both thresholds, and the drop is shaded in wine. Honest and familiar, but it asks the reader to eyeball the difference.'},
+    {id:'B',title:'Dumbbell on the gap',cap:'FIG 1B · DISTANCE FROM DISSIMILAR BASELINE',draw:m1_B,
+     edu:'Each threshold is a single line from the dissimilar baseline to the similar value, with the <b>% reduction called out on the line</b>. Puts the one number that matters, "how much closer," front and center.'},
+    {id:'C',title:'Difference with confidence interval',cap:'FIG 1C · LIKING-GAP REDUCTION ± 95% CI (DERIVED)',draw:m1_C,
+     edu:'For a rigorous audience: the <b>size of the reduction</b> with a 95% interval that excludes zero by a wide margin. The interval is derived from the reported t-statistic, so it is real, not invented.'},
+    {id:'D',title:'Executive headline stat',cap:'FIG 1D · ONE-LINE READOUT',draw:m1_D,
+     edu:'Strips it to the takeaway: a big <b>20.4% smaller</b>, a one-line plain meaning, and a "statistically near-certain" trust chip from the p-value. Best when this is one tile among five on a single page.'},
+  ],
+  caveat:'Worth flagging: the conservative "similar" group is only <b>6 product pairs</b> (12 at the permissive threshold), because few pairs are that chemically close. The effect is still extraordinarily significant (p ≈ 10⁻³⁹), but a thorough version should show the sample size so no one over-reads a tiny group. The report displayed error bars but never published their numeric values.'
+},
+{
+  id:'m2', num:'02', name:'Predictive Rank Concordance',
+  agree:'Agreement metric · Predictive Rank Concordance',
+  question:'Does the model put the products a palate will like near the top of its list?',
+  oneLine:'Product decisions are usually comparative — <b>which of these to prioritize</b>. This metric asks whether the model\'s ranked list puts the genuinely-liked products on top. The headline measure is NDCG.',
+  headline:'Headline number <b>0.928</b> — the NDCG ranking-quality score (1.0 would be a perfect ranking).',
+  data:{
+    sub:'Four rank-agreement measures between the model\'s predicted order and the consumer\'s actual liking order, ranking 25 products per held-out palate. All run 0→1 where 1.0 is perfect.',
+    cols:['Rank measure','Baseline value','Std. dev.','Approx. 95% interval','What it captures'],
+    rows:[
+      ['NDCG@10',{t:'0.928',acc:1},'0.049','0.915 – 0.940','Are the best items near the top?'],
+      ['Spearman (no ties)','0.384','0.322','0.304 – 0.464','Overall order, ties broken'],
+      ['Kendall Tau-c','0.175','0.261','0.110 – 0.240','Pairwise order agreement'],
+      ['Kendall Tau-b','0.173','0.257','0.109 – 0.237','Pairwise, tie-adjusted'],
+    ],
+    src:'Source: PVR-150 report, Metric #2 table + Appendix D.'
+  },
+  original:{title:'As the report showed it',sub:'A four-row table of statistics. No chart — the reader has to know that NDCG is the one to watch and that the others are naturally lower.',draw:o_m2},
+  options:[
+    {id:'A',title:'Ranked bars with intervals',cap:'FIG 2A · RANK MEASURES, 0→1 SCALE',draw:m2_A,
+     edu:'All four measures as horizontal bars on the same 0→1 scale, NDCG leading in accent, each with its 95% interval. Shows the full picture and why <b>NDCG stands apart</b> from the stricter pairwise measures.'},
+    {id:'B',title:'NDCG gauge, rest in support',cap:'FIG 2B · RANKING QUALITY 0.928 / 1.0',draw:m2_B,
+     edu:'Leads with the headline as an arc filled to <b>0.928 of a perfect 1.0</b>, with the other three measures as small supporting context. The most executive-friendly, single-glance version.'},
+    {id:'C',title:'Ideal order vs model order',cap:'FIG 2C · WHAT "RANKING QUALITY" MEANS',draw:m2_C,
+     edu:'Teaches the concept instead of the statistic: a perfect list beside the model\'s list, with the <b>top picks matching</b>. Best for an audience that has never seen NDCG and needs to grasp what 0.928 buys them.'},
+    {id:'D',title:'Forest plot of all four',cap:'FIG 2D · POINT ESTIMATE ± 95% INTERVAL',draw:m2_D,
+     edu:'A clinical-style dot-and-interval plot. Compact and precise; signals scientific rigor. Reads best for the data-science reviewers rather than the executive skim.'},
+  ],
+  caveat:'The Spearman and Kendall numbers look low next to NDCG, but that is expected: with only integer 1–9 ratings there are many ties, and exact pairwise order across 25 products is a far harder bar than "best items on top." Any executive view should make clear that <b>NDCG is the headline and the low pairwise numbers are not a weakness</b>. The report gives no random/null NDCG baseline for comparison.'
+},
+{
+  id:'m3', num:'03', name:'Precision & Recall at Positive Hedonic Threshold',
+  agree:'Agreement metric · Precision & Recall at Positive Hedonic Threshold (≥7)',
+  question:'When the model says "a consumer will like this," is it right — and does it work for everyone?',
+  oneLine:'The most direct test of the product: <b>recommendation accuracy</b>. When the model recommends a product, how often is the consumer\'s rating actually positive, versus what random guessing would get? And does it find a hit for nearly every palate?',
+  headline:'This single metric powers <b>two</b> headline numbers: <b>+16 pts</b> precision lift and <b>98-100%</b> palate coverage.',
+  data:{
+    sub:'Measured at two "liked" thresholds. HD ≥ 7 is the strict like; HD ≥ 6 is broad acceptance. Lift is precision above the random base rate. Coverage is the share of palates that get at least one correct recommendation.',
+    cols:['Threshold','Precision','Recall','F0.5','Coverage','Random base','Precision lift'],
+    rows:[
+      ['HD ≥ 7 (strict like)',{t:'51.04%',acc:1},'54.85%','0.518','98%','34.58%',{t:'+16.5 pts',acc:1}],
+      ['HD ≥ 6 (broad like)',{t:'66.07%',acc:1},'52.72%','0.629','100%','49.81%',{t:'+16.3 pts',acc:1}],
+    ],
+    src:'Source: PVR-150 report, Metric #3 table + Appendix E. F0.5 was the optimization metric (precision-weighted).'
+  },
+  original:{title:'As the report showed it',sub:'A table titled "Predictive Model Accuracy baseline." Six numbers per row, with the key story — precision beating the random base rate — left for the reader to compute.',draw:o_m3},
+  options:[
+    {id:'A',title:'Precision vs random base rate',cap:'FIG 3A · MODEL PRECISION vs RANDOM',draw:m3_A,
+     edu:'Model precision as a bar against a dashed "random" line at each threshold. The <b>gap above the line is the value the model adds</b>. Direct and credible.'},
+    {id:'B',title:'Lift dumbbell',cap:'FIG 3B · BASE RATE → MODEL PRECISION',draw:m3_B,
+     edu:'One line per threshold from the random base rate up to model precision, with <b>+16 pts</b> on the jump. The cleanest possible "here is what the model buys you" story.'},
+    {id:'C',title:'100-recommendation pictograph',cap:'FIG 3C · OUT OF 100 RECOMMENDATIONS',draw:m3_C,
+     edu:'An icon array: of 100 strict-like recommendations, about <b>51 land vs ~35 by chance</b>. The most intuitive for a non-technical executive — no axis to read, just count the dots.'},
+    {id:'D',title:'Coverage donut',cap:'FIG 3D · PALATES WITH A VALID MATCH',draw:m3_D,
+     edu:'Isolates the second headline number: the model found a liked product for <b>98–100% of held-out palates</b>. Important because a model can look accurate while only serving a few palates — this proves broad reach.'},
+    {id:'E',title:'Full scorecard, small multiples',cap:'FIG 3E · PRECISION · RECALL · F0.5 · COVERAGE',draw:m3_E,
+     edu:'All four quality measures as mini-bars for both thresholds. The complete technical picture in one block; denser, best for an appendix or a data-savvy reader.'},
+  ],
+  caveat:'This is the metric most worth getting right, because it carries two of the five headline numbers. An executive page should probably <b>split them</b>: one tile for "beats random by ~16 points" (accuracy) and one for "works for 98–100% of palates" (reach). Also note precision is higher at HD ≥ 6 (66%) than HD ≥ 7 (51%) simply because "broadly acceptable" is an easier target than "strongly liked."'
+},
+{
+  id:'m4', num:'04', name:'Cross-Validation Stability / Holdout Generalization',
+  agree:'Agreement metric · Cross-Validation Stability',
+  question:'Does the model hold up on consumer palates it was never trained on?',
+  oneLine:'The whole point is to predict <b>future</b> consumers, not to describe the ones already measured. This metric checks that the model generalizes. It is the one metric with <b>no single score</b> — it is read from how consistently the other metrics hold up out-of-sample.',
+  headline:'No headline number in the report. The evidence is consistency: a tight NDCG spread (±0.049) and 98–100% coverage on <i>reserved</i> palates.',
+  data:{
+    sub:'There is no standalone results table. Generalization is evidenced by the dispersion of the already-reported metrics, measured on a reserved validation set held out of model fitting.',
+    cols:['Evidence of generalization','Reading','Value'],
+    rows:[
+      ['Evaluated on reserved palates','Out-of-sample, not training data','yes'],
+      ['NDCG spread across palates','Tight = consistent behavior',{t:'±0.049',acc:1}],
+      ['NDCG 95% interval','Narrow band','0.915 – 0.940'],
+      ['Coverage on reserved palates','Broad, not a lucky few',{t:'98–100%',acc:1}],
+    ],
+    src:'Source: PVR-150 report, Metric #4 (conceptual table) + std-dev / coverage figures from Metrics #2–3.'
+  },
+  original:{title:'As the report showed it',sub:'A conceptual table of "validation elements" and their business interpretation — no chart, and no single number. Easy for an executive to skim past entirely.',draw:o_m4},
+  options:[
+    {id:'A',title:'Stability band',cap:'FIG 4A · NDCG 0.928 ± 0.049 ACROSS PALATES',draw:m4_A,
+     edu:'Shows the NDCG result as a <b>tight band on a 0→1 scale</b>: the model scores ~0.93 and barely moves from palate to palate. A narrow band is the visual proof of "consistent, not lucky."'},
+    {id:'B',title:'Held-out validation diagram',cap:'FIG 4B · TRAINED HERE, TESTED THERE',draw:m4_B,
+     edu:'A concept diagram: the model is fit on one slice of data and <b>scored on a reserved slice it never saw</b>. Explains the method behind the word "generalization" for anyone unsure what it means.'},
+    {id:'C',title:'Where the model is steady vs variable',cap:'FIG 4C · SPREAD OF EACH RANK MEASURE',draw:m4_C,
+     edu:'Plots the std-dev of each measure: <b>NDCG is tight, pairwise measures are wider</b>. An honest "where it\'s rock-solid and where it varies" view, rather than a single reassuring number.'},
+    {id:'D',title:'Generalization scorecard',cap:'FIG 4D · OUT-OF-SAMPLE READOUT',draw:m4_D,
+     edu:'Restates the borrowed evidence as a tidy three-stat card: <b>out-of-sample, tight spread, broad coverage</b>. Best if you want Metric 4 to feel like a real, presentable result instead of a footnote.'},
+  ],
+  caveat:'This is the clearest gap for an executive audience. Metric 4 is genuinely important — it is what separates "prediction" from "describing old data" — yet the report gives it <b>no number and no chart</b>, so it disappears on a skim. My recommendation: give it a real visual in the final report (Option A or D) rather than letting it vanish, and consider asking the science team for a single summary statistic for it.'
+},
+{
+  id:'m5', num:'05', name:'Population Segmentation Convergence',
+  agree:'Agreement metric · Population Segmentation Convergence',
+  question:'Are the taste profiles of different regions measurably different?',
+  oneLine:'The seed of regional strategy: can the model <b>tell markets apart</b> by predicted palate? It compares the taste distribution of three cities and measures how far apart each pair is.',
+  headline:'Headline number <b>3 markets</b> — Atlanta, Dallas and Milwaukee, with measurable palate differences.',
+  data:{
+    sub:'Jensen-Shannon divergence between each pair of cities\' predicted palate distributions. 0 = identical, higher = more different. Lower numbers mean the two markets have more similar tastes.',
+    cols:['Market pair','Mean JSD','Median','Std. dev.','Reading'],
+    rows:[
+      ['Atlanta ↔ Milwaukee',{t:'0.2825',acc:1},'0.2787','0.0728','most alike'],
+      ['Atlanta ↔ Dallas','0.3079','0.3132','0.0641','middle'],
+      ['Dallas ↔ Milwaukee',{t:'0.3353',acc:1},'0.3397','0.0638','most distinct'],
+    ],
+    src:'Source: PVR-150 report, Metric #5 table + Appendix G. Palate space = 3^k for k=5–8 (243 to 6,561 palates).'
+  },
+  original:{title:'As the report showed it',sub:'A three-row table of divergence statistics. The relationship between the cities — who is close to whom — is hard to see in a list of decimals.',draw:o_m5},
+  options:[
+    {id:'A',title:'Market network',cap:'FIG 5A · PALATE DISTANCE BETWEEN MARKETS',draw:m5_A,
+     edu:'The three cities as nodes; each connecting line is their palate distance, the <b>most divergent pair drawn in accent</b>. Shows the whole relationship at a glance — Atlanta and Milwaukee closest, Dallas and Milwaukee farthest.'},
+    {id:'B',title:'Sorted distance bars',cap:'FIG 5B · PAIRWISE DIVERGENCE, RANKED',draw:m5_B,
+     edu:'The three pairs as bars on a "more alike → more different" axis. The plainest read of <b>which markets differ most</b>, and by how much.'},
+    {id:'C',title:'Distance matrix',cap:'FIG 5C · CITY × CITY DIVERGENCE',draw:m5_C,
+     edu:'A shaded 3×3 grid, like a familiar correlation table: darker = more different. Scales naturally if more markets are added later, and executives recognize the format instantly.'},
+    {id:'D',title:'Number line',cap:'FIG 5D · ALL THREE DISTANCES, TO SCALE',draw:m5_D,
+     edu:'All three values placed on one 0→0.4 line. Makes the honest point that the differences are <b>real but moderate and tightly clustered</b> (0.28–0.34), not dramatic — useful context for strategy.'},
+  ],
+  caveat:'Two honesty notes for the final report: this baseline says markets <b>are different</b>, it is not yet a "convergence" claim, and the differences are moderate. Also, this metric comes from <b>intake-survey responses, not actual tastings</b>, a distinction the report draws but a one-pager could easily blur. The report reports spread (std dev) but no formal significance test that the cities differ.'
+},
+];
+
+/* ============================ original-display renderers ============================ */
+function o_m1(s){m1_A(s,true);}
+function o_m2(s){ // simple stat table look
+  s.setAttribute('viewBox','0 0 420 200');
+  const rows=[['NDCG@10','0.928'],['Spearman','0.384'],['Kendall Tau-c','0.175'],['Kendall Tau-b','0.173']];
+  T(s,12,26,'PREDICTIVE RANK CONCORDANCE',mono({'font-size':10,fill:C.muted}));
+  add(s,'line',{x1:12,y1:38,x2:408,y2:38,stroke:C.ink,opacity:.2});
+  rows.forEach((r,i)=>{const y=66+i*32;
+    T(s,12,y,r[0],{'font-family':'Inter','font-size':13,fill:C.ink});
+    T(s,408,y,r[1],Object.assign(mono({'font-size':13,fill:i===0?C.accent:C.ink}),{'text-anchor':'end'}));
+    add(s,'line',{x1:12,y1:y+12,x2:408,y2:y+12,stroke:C.ink,opacity:.06});
+  });
+  T(s,12,190,'AS A TABLE — NDCG IS THE ONE TO WATCH, BUT NOTHING SAYS SO',mono({'font-size':8,fill:C.muted2}));
+}
+function o_m3(s){
+  s.setAttribute('viewBox','0 0 420 200');
+  const head=['','PREC','RECALL','COVER'];const rows=[['HD≥7','51%','55%','98%'],['HD≥6','66%','53%','100%']];
+  const xs=[14,200,290,380];
+  head.forEach((h,i)=>T(s,xs[i],24,h,Object.assign(mono({'font-size':9,fill:C.muted2}),{'text-anchor':i?'end':'start'})));
+  add(s,'line',{x1:12,y1:34,x2:408,y2:34,stroke:C.ink,opacity:.2});
+  rows.forEach((r,ri)=>{const y=62+ri*34;
+    r.forEach((c,ci)=>T(s,xs[ci],y,c,Object.assign(ci?mono({'font-size':13,fill:C.ink}):{'font-family':'Inter','font-size':13,fill:C.ink},{'text-anchor':ci?'end':'start'})));
+    add(s,'line',{x1:12,y1:y+12,x2:408,y2:y+12,stroke:C.ink,opacity:.06});
+  });
+  T(s,14,150,'BASE RATE 34.58% / 49.81%  ·  LIFT +16 pts',mono({'font-size':9,fill:C.muted}));
+  T(s,12,190,'AS A TABLE — THE READER HAS TO SUBTRACT TO SEE THE LIFT',mono({'font-size':8,fill:C.muted2}));
+}
+function o_m4(s){
+  s.setAttribute('viewBox','0 0 420 200');
+  const rows=[['Reserved validation structure','Tests behavior outside fitting data'],
+    ['Performance dispersion','How consistent across palates'],
+    ['Rank-metric dispersion','Stable or concentrated?'],
+    ['Benchmark values','Reference point for PVR-300']];
+  rows.forEach((r,i)=>{const y=34+i*40;
+    add(s,'circle',{cx:20,cy:y-4,r:3,fill:C.accent});
+    T(s,34,y,r[0],{'font-family':'Inter','font-size':12.5,fill:C.ink,'font-weight':500});
+    T(s,34,y+16,r[1],{'font-family':'Inter','font-size':11.5,fill:C.muted});
+  });
+  T(s,12,196,'AS A CONCEPT TABLE — NO NUMBER, EASY TO SKIP',mono({'font-size':8,fill:C.muted2}));
+}
+function o_m5(s){
+  s.setAttribute('viewBox','0 0 420 200');
+  const head=['PAIR','MEAN JSD','MEDIAN','SD'];const xs=[14,250,330,405];
+  const rows=[['ATL–MKE','0.2825','0.2787','0.073'],['ATL–DAL','0.3079','0.3132','0.064'],['DAL–MKE','0.3353','0.3397','0.064']];
+  head.forEach((h,i)=>T(s,xs[i],24,h,Object.assign(mono({'font-size':9,fill:C.muted2}),{'text-anchor':i?'end':'start'})));
+  add(s,'line',{x1:12,y1:34,x2:408,y2:34,stroke:C.ink,opacity:.2});
+  rows.forEach((r,ri)=>{const y=62+ri*34;
+    r.forEach((c,ci)=>T(s,xs[ci],y,c,Object.assign(ci?mono({'font-size':12.5,fill:C.ink}):{'font-family':'Inter','font-size':12.5,fill:C.ink},{'text-anchor':ci?'end':'start'})));
+    add(s,'line',{x1:12,y1:y+12,x2:408,y2:y+12,stroke:C.ink,opacity:.06});
+  });
+  T(s,12,192,'AS A TABLE — HARD TO SEE WHICH CITIES ARE CLOSE',mono({'font-size':8,fill:C.muted2}));
+}
+
+/* ============================ Metric 1 renderers ============================ */
+function m1_A(s,plain){
+  s.setAttribute('viewBox','0 0 420 240');
+  const x0=64,x1=404,top=24,base=188,vmax=2.6;
+  const Y=v=>base-(v/vmax)*(base-top);
+  [0,0.5,1,1.5,2,2.5].forEach(v=>{add(s,'line',{x1:x0,y1:Y(v),x2:x1,y2:Y(v),stroke:C.ink,opacity:.07});
+    T(s,x0-8,Y(v)+3,v.toFixed(1),Object.assign(mono({'text-anchor':'end'}),{}));});
+  const groups=[{n:'CONSERVATIVE',sim:1.770,dis:2.225,red:'20.4%',cx:150},{n:'PERMISSIVE',sim:1.996,dis:2.225,red:'10.3%',cx:310}];
+  groups.forEach(g=>{
+    const bw=42,gap=14;const xs=g.cx-bw-gap/2, xd=g.cx+gap/2;
+    add(s,'rect',{x:xd,y:Y(g.dis),width:bw,height:base-Y(g.dis),fill:C.tint});
+    add(s,'rect',{x:xs,y:Y(g.sim),width:bw,height:base-Y(g.sim),fill:C.accent});
+    // gap shading
+    add(s,'rect',{x:xs,y:Y(g.dis),width:bw,height:Y(g.sim)-Y(g.dis),fill:C.accent,opacity:.12});
+    add(s,'line',{x1:xs,y1:Y(g.dis),x2:xs+bw,y2:Y(g.dis),stroke:C.accent,'stroke-dasharray':'3 2','stroke-width':1});
+    T(s,xs+bw/2,Y(g.sim)-7,g.sim.toFixed(2),Object.assign(mono({'font-size':10,fill:C.accent,'text-anchor':'middle'}),{}));
+    T(s,xd+bw/2,Y(g.dis)-7,g.dis.toFixed(2),Object.assign(mono({'font-size':10,fill:C.muted,'text-anchor':'middle'}),{}));
+    T(s,g.cx,base+16,g.n,mono({'text-anchor':'middle',fill:C.muted}));
+    if(!plain)T(s,g.cx,base+30,'↓ '+g.red,Object.assign(mono({'text-anchor':'middle',fill:C.accent,'font-size':9.5}),{}));
+  });
+  T(s,x0-8,top-8,'LIKING GAP',mono({'font-size':8,fill:C.muted2}));
+  // legend
+  add(s,'rect',{x:x0,y:222,width:10,height:10,fill:C.accent});T(s,x0+15,231,'SIMILAR',mono({'font-size':8.5,fill:C.muted}));
+  add(s,'rect',{x:x0+90,y:222,width:10,height:10,fill:C.tint});T(s,x0+105,231,'DISSIMILAR',mono({'font-size':8.5,fill:C.muted}));
+}
+function m1_B(s){
+  s.setAttribute('viewBox','0 0 420 220');
+  const x0=150,x1=392,vmin=1.6,vmax=2.3;
+  const X=v=>x0+((v-vmin)/(vmax-vmin))*(x1-x0);
+  [1.6,1.8,2.0,2.2].forEach(v=>{add(s,'line',{x1:X(v),y1:40,x2:X(v),y2:150,stroke:C.ink,opacity:.07});
+    T(s,X(v),168,v.toFixed(1),mono({'text-anchor':'middle'}));});
+  const rows=[{n:'CONSERVATIVE',sim:1.770,dis:2.225,red:'20.4% closer',y:70},{n:'PERMISSIVE',sim:1.996,dis:2.225,red:'10.3% closer',y:120}];
+  rows.forEach(r=>{
+    add(s,'line',{x1:X(r.sim),y1:r.y,x2:X(r.dis),y2:r.y,stroke:C.accent,'stroke-width':2});
+    add(s,'circle',{cx:X(r.dis),cy:r.y,r:6,fill:C.surface,stroke:C.muted,'stroke-width':1.5});
+    add(s,'circle',{cx:X(r.sim),cy:r.y,r:6.5,fill:C.accent});
+    T(s,12,r.y-6,r.n,mono({'font-size':9,fill:C.muted}));
+    T(s,12,r.y+9,r.red,Object.assign({'font-family':FRAU,'font-style':'italic','font-size':13,fill:C.accent},{}));
+  });
+  T(s,X(1.770),54,'similar',mono({'font-size':8,fill:C.accent,'text-anchor':'middle'}));
+  T(s,X(2.225),54,'dissimilar',mono({'font-size':8,fill:C.muted2,'text-anchor':'middle'}));
+  T(s,12,192,'MEAN LIKING GAP (1–9 SCALE) · LEFT = MORE ALIKE',mono({'font-size':8,fill:C.muted2}));
+}
+function m1_C(s){
+  s.setAttribute('viewBox','0 0 420 220');
+  // difference with derived 95% CI. diff=-0.455 SE=0.0352 -> CI; permissive diff=-0.229 SE=0.0270
+  const data=[{n:'CONSERVATIVE',d:0.455,lo:0.386,hi:0.524,y:74},{n:'PERMISSIVE',d:0.229,lo:0.176,hi:0.282,y:134}];
+  const x0=150,x1=392,vmax=0.6;const X=v=>x0+(v/vmax)*(x1-x0);
+  [0,0.2,0.4,0.6].forEach(v=>{add(s,'line',{x1:X(v),y1:40,x2:X(v),y2:170,stroke:C.ink,opacity:.07});T(s,X(v),186,v.toFixed(1),mono({'text-anchor':'middle'}));});
+  add(s,'line',{x1:X(0),y1:40,x2:X(0),y2:170,stroke:C.ink,opacity:.25});T(s,X(0),34,'NO EFFECT',mono({'font-size':8,fill:C.muted2,'text-anchor':'middle'}));
+  data.forEach(r=>{
+    add(s,'line',{x1:X(r.lo),y1:r.y,x2:X(r.hi),y2:r.y,stroke:C.accent,'stroke-width':1.5});
+    add(s,'line',{x1:X(r.lo),y1:r.y-5,x2:X(r.lo),y2:r.y+5,stroke:C.accent,'stroke-width':1.5});
+    add(s,'line',{x1:X(r.hi),y1:r.y-5,x2:X(r.hi),y2:r.y+5,stroke:C.accent,'stroke-width':1.5});
+    add(s,'circle',{cx:X(r.d),cy:r.y,r:6,fill:C.accent});
+    T(s,12,r.y-7,r.n,mono({'font-size':9,fill:C.muted}));
+    T(s,12,r.y+9,'−'+r.d.toFixed(2)+' liking pts',Object.assign(mono({'font-size':11,fill:C.ink}),{}));
+  });
+  T(s,12,206,'REDUCTION IN LIKING GAP ± 95% CI · DERIVED FROM REPORTED t',mono({'font-size':8,fill:C.muted2}));
+}
+function m1_D(s){
+  s.setAttribute('viewBox','0 0 420 220');
+  T(s,20,40,'CORE ASSUMPTION',mono({'font-size':10,fill:C.muted}));
+  T(s,18,108,'20.4%',{'font-family':FRAU,'font-size':74,fill:C.ink,'font-weight':300});
+  T(s,20,140,'smaller liking gap when products are',{'font-family':'Inter','font-size':14,fill:C.muted});
+  T(s,20,160,'chemically similar.',{'font-family':FRAU,'font-style':'italic','font-size':16,fill:C.accent});
+  // trust chip
+  add(s,'rect',{x:20,y:178,width:236,height:26,rx:13,fill:'none',stroke:C.line});
+  add(s,'circle',{cx:36,cy:191,r:4,fill:C.green});
+  T(s,48,195,'STATISTICALLY NEAR-CERTAIN · p ≈ 10⁻³⁹',mono({'font-size':9,fill:C.muted}));
+  // mini bars
+  const bx=320,bb=150;
+  add(s,'rect',{x:bx,y:bb-64,width:26,height:64,fill:C.tint});T(s,bx+13,bb+12,'DIS',mono({'font-size':8,fill:C.muted2,'text-anchor':'middle'}));
+  add(s,'rect',{x:bx+40,y:bb-51,width:26,height:51,fill:C.accent});T(s,bx+53,bb+12,'SIM',mono({'font-size':8,fill:C.muted2,'text-anchor':'middle'}));
+}
+
+/* ============================ Metric 2 renderers ============================ */
+function m2_A(s){
+  s.setAttribute('viewBox','0 0 420 230');
+  const rows=[{n:'NDCG@10',v:0.928,lo:0.915,hi:0.940,acc:1},{n:'Spearman',v:0.384,lo:0.304,hi:0.464},
+    {n:'Kendall Tau-c',v:0.175,lo:0.110,hi:0.240},{n:'Kendall Tau-b',v:0.173,lo:0.109,hi:0.237}];
+  const x0=118,x1=398;const X=v=>x0+v*(x1-x0);
+  [0,0.25,0.5,0.75,1].forEach(v=>{add(s,'line',{x1:X(v),y1:24,x2:X(v),y2:186,stroke:C.ink,opacity:.07});T(s,X(v),202,v.toFixed(2),mono({'text-anchor':'middle'}));});
+  add(s,'line',{x1:X(1),y1:24,x2:X(1),y2:186,stroke:C.ink,opacity:.22,'stroke-dasharray':'3 3'});T(s,X(1),18,'PERFECT',mono({'font-size':7.5,fill:C.muted2,'text-anchor':'middle'}));
+  rows.forEach((r,i)=>{const y=44+i*38;const col=r.acc?C.accent:C.muted;
+    add(s,'rect',{x:x0,y:y-9,width:X(r.v)-x0,height:18,fill:col,opacity:r.acc?1:.5,rx:2});
+    add(s,'line',{x1:X(r.lo),y1:y,x2:X(r.hi),y2:y,stroke:C.ink,opacity:.5});
+    add(s,'line',{x1:X(r.lo),y1:y-4,x2:X(r.lo),y2:y+4,stroke:C.ink,opacity:.5});
+    add(s,'line',{x1:X(r.hi),y1:y-4,x2:X(r.hi),y2:y+4,stroke:C.ink,opacity:.5});
+    T(s,12,y+4,r.n,{'font-family':'Inter','font-size':11.5,fill:C.ink,'font-weight':r.acc?600:400});
+    T(s,X(r.v)+8,y+4,r.v.toFixed(3),mono({'font-size':10,fill:col}));
+  });
+  T(s,12,222,'RANK AGREEMENT 0→1 · BAR = VALUE · WHISKER = 95% INTERVAL',mono({'font-size':8,fill:C.muted2}));
+}
+function m2_B(s){
+  s.setAttribute('viewBox','0 0 420 230');
+  const cx=110,cy=104,r=72,val=0.928;
+  const circ=2*Math.PI*r;
+  add(s,'circle',{cx,cy,r,fill:'none',stroke:C.line,'stroke-width':12});
+  add(s,'circle',{cx,cy,r,fill:'none',stroke:C.accent,'stroke-width':12,'stroke-linecap':'round',
+    'stroke-dasharray':circ,'stroke-dashoffset':circ*(1-val),transform:`rotate(-90 ${cx} ${cy})`});
+  T(s,cx,cy-2,'0.928',{'font-family':FRAU,'font-size':34,fill:C.ink,'text-anchor':'middle','font-weight':300});
+  T(s,cx,cy+20,'OF 1.0',mono({'font-size':9,fill:C.muted2,'text-anchor':'middle'}));
+  T(s,cx,cy+202-160,'NDCG RANKING QUALITY',mono({'font-size':9,fill:C.muted,'text-anchor':'middle'}));
+  // support list
+  const sup=[['Spearman','0.384'],['Kendall Tau-c','0.175'],['Kendall Tau-b','0.173']];
+  T(s,232,52,'SUPPORTING MEASURES',mono({'font-size':8.5,fill:C.muted2}));
+  sup.forEach((r,i)=>{const y=78+i*30;
+    T(s,232,y,r[0],{'font-family':'Inter','font-size':12,fill:C.muted});
+    T(s,404,y,r[1],Object.assign(mono({'font-size':12,fill:C.ink}),{'text-anchor':'end'}));
+    add(s,'line',{x1:232,y1:y+10,x2:404,y2:y+10,stroke:C.ink,opacity:.07});});
+  T(s,232,206,'1.0 = A PERFECT RANKING',mono({'font-size':8,fill:C.muted2}));
+}
+function m2_C(s){
+  s.setAttribute('viewBox','0 0 420 230');
+  T(s,70,30,'IDEAL ORDER',mono({'font-size':9,fill:C.muted,'text-anchor':'middle'}));
+  T(s,300,30,'MODEL ORDER',mono({'font-size':9,fill:C.accent,'text-anchor':'middle'}));
+  // ideal list 1..6, model list with top matching, slight swaps lower
+  const ideal=[1,2,3,4,5,6];const model=[1,2,3,5,4,6];
+  const liked=new Set([1,2,3]);
+  function chip(x,y,n,faded){const col=liked.has(n)?C.accent:C.muted;
+    add(s,'rect',{x,y:y-13,width:120,height:24,rx:5,fill:liked.has(n)?'rgba(122,46,31,0.08)':'none',stroke:col,opacity:liked.has(n)?1:.4});
+    add(s,'circle',{cx:x+16,cy:y,r:4,fill:col,opacity:liked.has(n)?1:.4});
+    T(s,x+30,y+4,'Product '+String.fromCharCode(64+n),{'font-family':'Inter','font-size':11,fill:liked.has(n)?C.ink:C.muted});}
+  ideal.forEach((n,i)=>chip(10,58+i*27,n));
+  model.forEach((n,i)=>chip(240,58+i*27,n));
+  // connectors for top 3
+  [0,1,2].forEach(i=>{add(s,'line',{x1:130,y1:58+i*27,x2:240,y2:58+i*27,stroke:C.accent,opacity:.5,'stroke-dasharray':'2 2'});});
+  T(s,185,224-2,'TOP PICKS LINE UP → NDCG 0.928',mono({'font-size':8.5,fill:C.muted,'text-anchor':'middle'}));
+}
+function m2_D(s){
+  s.setAttribute('viewBox','0 0 420 230');
+  const rows=[{n:'NDCG@10',v:0.928,lo:0.915,hi:0.940,acc:1},{n:'Spearman',v:0.384,lo:0.304,hi:0.464},
+    {n:'Kendall Tau-c',v:0.175,lo:0.110,hi:0.240},{n:'Kendall Tau-b',v:0.173,lo:0.109,hi:0.237}];
+  const x0=120,x1=398;const X=v=>x0+v*(x1-x0);
+  [0,0.25,0.5,0.75,1].forEach(v=>{add(s,'line',{x1:X(v),y1:30,x2:X(v),y2:188,stroke:C.ink,opacity:.07});T(s,X(v),204,v.toFixed(2),mono({'text-anchor':'middle'}));});
+  rows.forEach((r,i)=>{const y=52+i*38;const col=r.acc?C.accent:C.ink;
+    add(s,'line',{x1:X(r.lo),y1:y,x2:X(r.hi),y2:y,stroke:col,'stroke-width':1.5,opacity:r.acc?1:.55});
+    add(s,'line',{x1:X(r.lo),y1:y-5,x2:X(r.lo),y2:y+5,stroke:col,'stroke-width':1.5,opacity:r.acc?1:.55});
+    add(s,'line',{x1:X(r.hi),y1:y-5,x2:X(r.hi),y2:y+5,stroke:col,'stroke-width':1.5,opacity:r.acc?1:.55});
+    add(s,'circle',{cx:X(r.v),cy:y,r:5,fill:col});
+    T(s,12,y+4,r.n,{'font-family':'Inter','font-size':11.5,fill:C.ink,'font-weight':r.acc?600:400});
+  });
+  T(s,12,222,'POINT ESTIMATE ● WITH 95% INTERVAL',mono({'font-size':8,fill:C.muted2}));
+}
+
+/* ============================ Metric 3 renderers ============================ */
+function m3_A(s){
+  s.setAttribute('viewBox','0 0 420 240');
+  const x0=52,x1=404,top=22,base=180,vmax=80;const Y=v=>base-(v/vmax)*(base-top);
+  [0,20,40,60,80].forEach(v=>{add(s,'line',{x1:x0,y1:Y(v),x2:x1,y2:Y(v),stroke:C.ink,opacity:.07});T(s,x0-8,Y(v)+3,v,Object.assign(mono({'text-anchor':'end'}),{}));});
+  const G=[{n:'HD ≥ 7',p:51.04,b:34.58,cx:148},{n:'HD ≥ 6',p:66.07,b:49.81,cx:308}];
+  G.forEach(g=>{const bw=58;
+    add(s,'rect',{x:g.cx-bw/2,y:Y(g.p),width:bw,height:base-Y(g.p),fill:C.accent,rx:3});
+    add(s,'line',{x1:g.cx-bw/2-14,y1:Y(g.b),x2:g.cx+bw/2+14,y2:Y(g.b),stroke:C.ink,'stroke-width':1.5,'stroke-dasharray':'5 4'});
+    T(s,g.cx+bw/2+18,Y(g.b)+3,'random '+g.b.toFixed(0)+'%',mono({'font-size':8.5,fill:C.muted}));
+    T(s,g.cx,Y(g.p)-8,g.p.toFixed(0)+'%',{'font-family':FRAU,'font-size':17,fill:C.accent,'text-anchor':'middle'});
+    // lift bracket
+    T(s,g.cx,(Y(g.p)+Y(g.b))/2+3,'+'+(g.p-g.b).toFixed(0),Object.assign(mono({'font-size':9,fill:C.accent,'text-anchor':'middle'}),{}));
+    T(s,g.cx,base+16,g.n,mono({'text-anchor':'middle',fill:C.muted}));
+  });
+  T(s,x0-8,top-8,'PRECISION %',mono({'font-size':8,fill:C.muted2}));
+  T(s,52,224,'BAR = MODEL PRECISION · DASH = RANDOM BASE RATE',mono({'font-size':8,fill:C.muted2}));
+}
+function m3_B(s){
+  s.setAttribute('viewBox','0 0 420 230');
+  const y0=30,y1=170,vmax=80;const Y=v=>y1-(v/vmax)*(y1-y0);
+  [0,20,40,60,80].forEach(v=>{add(s,'line',{x1:60,y1:Y(v),x2:404,y2:Y(v),stroke:C.ink,opacity:.07});T(s,52,Y(v)+3,v,Object.assign(mono({'text-anchor':'end'}),{}));});
+  const G=[{n:'HD ≥ 7',p:51.04,b:34.58,x:160},{n:'HD ≥ 6',p:66.07,b:49.81,x:300}];
+  G.forEach(g=>{
+    add(s,'line',{x1:g.x,y1:Y(g.b),x2:g.x,y2:Y(g.p),stroke:C.accent,'stroke-width':2.5});
+    add(s,'circle',{cx:g.x,cy:Y(g.b),r:5,fill:C.surface,stroke:C.muted,'stroke-width':1.5});
+    add(s,'circle',{cx:g.x,cy:Y(g.p),r:6.5,fill:C.accent});
+    T(s,g.x,Y(g.p)-11,g.p.toFixed(0)+'%',{'font-family':FRAU,'font-size':16,fill:C.accent,'text-anchor':'middle'});
+    T(s,g.x+12,(Y(g.p)+Y(g.b))/2+3,'+'+(g.p-g.b).toFixed(0)+' pts',mono({'font-size':10,fill:C.accent}));
+    T(s,g.x,Y(g.b)+16,'random '+g.b.toFixed(0)+'%',mono({'font-size':8.5,fill:C.muted,'text-anchor':'middle'}));
+    T(s,g.x,186,g.n,mono({'text-anchor':'middle',fill:C.muted}));
+  });
+  T(s,60,212,'EACH LINE: WHAT THE MODEL ADDS OVER GUESSING',mono({'font-size':8,fill:C.muted2}));
+}
+function m3_C(s){
+  s.setAttribute('viewBox','0 0 420 240');
+  // 100 dots, 10x10. ~51 model hits accent, ~35 random outline among them concept: show model 51 filled
+  const cols=10,rows=10,gap=33,ox=40,oy=26,r=6;
+  for(let i=0;i<100;i++){const cx=ox+(i%cols)*gap,cy=oy+Math.floor(i/cols)*gap;
+    const hit=i<51;add(s,'circle',{cx,cy,r,fill:hit?C.accent:'none',stroke:hit?C.accent:C.line,'stroke-width':1});}
+  T(s,40,234,'≈ 51 OF 100 STRICT-LIKE PICKS LAND · RANDOM WOULD HIT ≈ 35',mono({'font-size':8.5,fill:C.muted}));
+}
+function m3_D(s){
+  s.setAttribute('viewBox','0 0 420 230');
+  const cx=130,cy=110,r=74,val=0.99;const circ=2*Math.PI*r;
+  add(s,'circle',{cx,cy,r,fill:'none',stroke:C.line,'stroke-width':13});
+  add(s,'circle',{cx,cy,r,fill:'none',stroke:C.accent,'stroke-width':13,'stroke-linecap':'round',
+    'stroke-dasharray':circ,'stroke-dashoffset':circ*(1-val),transform:`rotate(-90 ${cx} ${cy})`});
+  T(s,cx,cy-4,'98–100%',{'font-family':FRAU,'font-size':27,fill:C.ink,'text-anchor':'middle','font-weight':300});
+  T(s,cx,cy+18,'OF PALATES',mono({'font-size':9,fill:C.muted2,'text-anchor':'middle'}));
+  T(s,250,96,'Every held-out',{'font-family':'Inter','font-size':14,fill:C.muted});
+  T(s,250,116,'palate gets a',{'font-family':'Inter','font-size':14,fill:C.muted});
+  T(s,250,138,'valid match.',{'font-family':FRAU,'font-style':'italic','font-size':17,fill:C.accent});
+  T(s,250,210,'98% AT HD≥7 · 100% AT HD≥6',mono({'font-size':8.5,fill:C.muted2}));
+}
+function m3_E(s){
+  s.setAttribute('viewBox','0 0 420 240');
+  const metrics=[{n:'PRECISION',a:51,b:66},{n:'RECALL',a:55,b:53},{n:'F0.5',a:52,b:63},{n:'COVERAGE',a:98,b:100}];
+  const x0=20,colw=98;
+  metrics.forEach((m,i)=>{const cx=x0+i*colw+colw/2-6;const base=180,top=46,h=base-top;
+    const va=m.a/100,vb=m.b/100;const bw=20;
+    add(s,'rect',{x:cx-bw-3,y:base-va*h,width:bw,height:va*h,fill:C.accent,rx:2});
+    add(s,'rect',{x:cx+3,y:base-vb*h,width:bw,height:vb*h,fill:C.tint,rx:2});
+    T(s,cx-bw/2-3,base-va*h-5,m.a,mono({'font-size':9,fill:C.accent,'text-anchor':'middle'}));
+    T(s,cx+bw/2+3,base-vb*h-5,m.b,mono({'font-size':9,fill:C.muted,'text-anchor':'middle'}));
+    T(s,cx,base+15,m.n,mono({'font-size':8,fill:C.muted,'text-anchor':'middle'}));
+  });
+  add(s,'rect',{x:20,y:208,width:10,height:10,fill:C.accent});T(s,35,217,'HD ≥ 7',mono({'font-size':8.5,fill:C.muted}));
+  add(s,'rect',{x:96,y:208,width:10,height:10,fill:C.tint});T(s,111,217,'HD ≥ 6',mono({'font-size':8.5,fill:C.muted}));
+  T(s,250,217,'VALUES IN % · ALL FOUR QUALITY MEASURES',mono({'font-size':8,fill:C.muted2}));
+}
+
+/* ============================ Metric 4 renderers ============================ */
+function m4_A(s){
+  s.setAttribute('viewBox','0 0 420 220');
+  const x0=40,x1=400,y=96,vmax=1;const X=v=>x0+v*(x1-x0);
+  [0,0.25,0.5,0.75,1].forEach(v=>{add(s,'line',{x1:X(v),y1:50,x2:X(v),y2:150,stroke:C.ink,opacity:.07});T(s,X(v),168,v.toFixed(2),mono({'text-anchor':'middle'}));});
+  add(s,'line',{x1:X(1),y1:50,x2:X(1),y2:150,stroke:C.ink,opacity:.2,'stroke-dasharray':'3 3'});T(s,X(1),44,'PERFECT',mono({'font-size':7.5,fill:C.muted2,'text-anchor':'middle'}));
+  // band 0.879..0.977 (±0.049 *? actually mean±sd) use 0.928±0.049
+  const m=0.928,sd=0.049;
+  add(s,'rect',{x:X(m-sd),y:y-26,width:X(m+sd)-X(m-sd),height:52,fill:C.accent,opacity:.13,rx:4});
+  add(s,'line',{x1:X(m),y1:y-30,x2:X(m),y2:y+30,stroke:C.accent,'stroke-width':2});
+  add(s,'circle',{cx:X(m),cy:y,r:6,fill:C.accent});
+  T(s,X(m),y-38,'NDCG 0.928',{'font-family':FRAU,'font-size':15,fill:C.ink,'text-anchor':'middle'});
+  T(s,X(m+sd)+6,y+4,'±0.049',mono({'font-size':9,fill:C.accent}));
+  T(s,40,200,'NARROW BAND = MODEL SCORES ~0.93 ON NEARLY EVERY HELD-OUT PALATE',mono({'font-size':8,fill:C.muted2}));
+}
+function m4_B(s){
+  s.setAttribute('viewBox','0 0 420 220');
+  // fit box -> reserved box -> evaluate
+  add(s,'rect',{x:24,y:60,width:150,height:88,rx:8,fill:'none',stroke:C.ink,opacity:.55});
+  T(s,99,52,'MODEL FITTING DATA',mono({'font-size':8.5,fill:C.muted,'text-anchor':'middle'}));
+  // dots
+  for(let i=0;i<24;i++){add(s,'circle',{cx:40+(i%6)*22,cy:78+Math.floor(i/6)*20,r:3,fill:C.muted,opacity:.5});}
+  add(s,'rect',{x:246,y:60,width:150,height:88,rx:8,fill:'rgba(122,46,31,0.06)',stroke:C.accent});
+  T(s,321,52,'RESERVED PALATES',mono({'font-size':8.5,fill:C.accent,'text-anchor':'middle'}));
+  for(let i=0;i<24;i++){add(s,'circle',{cx:262+(i%6)*22,cy:78+Math.floor(i/6)*20,r:3,fill:C.accent,opacity:.6});}
+  // arrow
+  add(s,'line',{x1:178,y1:104,x2:242,y2:104,stroke:C.ink,'stroke-width':1.4});
+  add(s,'path',{d:'M242 104 l-9 -5 v10 z',fill:C.ink});
+  T(s,210,96,'SCORE',mono({'font-size':8,fill:C.muted,'text-anchor':'middle'}));
+  T(s,210,118,'HERE',mono({'font-size':8,fill:C.muted,'text-anchor':'middle'}));
+  T(s,321,176,'NDCG 0.928 · COVERAGE 98–100%',mono({'font-size':9,fill:C.ink,'text-anchor':'middle'}));
+  T(s,24,202,'GENERALIZATION = SCORED ON DATA IT NEVER TRAINED ON',mono({'font-size':8,fill:C.muted2}));
+}
+function m4_C(s){
+  s.setAttribute('viewBox','0 0 420 220');
+  const rows=[{n:'NDCG@10',sd:0.049},{n:'Kendall Tau-b',sd:0.257},{n:'Kendall Tau-c',sd:0.261},{n:'Spearman',sd:0.322}];
+  const x0=120,x1=398,vmax=0.35;const X=v=>x0+(v/vmax)*(x1-x0);
+  [0,0.1,0.2,0.3].forEach(v=>{add(s,'line',{x1:X(v),y1:24,x2:X(v),y2:170,stroke:C.ink,opacity:.07});T(s,X(v),186,v.toFixed(1),mono({'text-anchor':'middle'}));});
+  rows.forEach((r,i)=>{const y=48+i*36;const acc=i===0;
+    add(s,'rect',{x:x0,y:y-9,width:X(r.sd)-x0,height:18,fill:acc?C.accent:C.muted,opacity:acc?1:.45,rx:2});
+    T(s,12,y+4,r.n,{'font-family':'Inter','font-size':11.5,fill:C.ink,'font-weight':acc?600:400});
+    T(s,X(r.sd)+7,y+4,'±'+r.sd.toFixed(3),mono({'font-size':9.5,fill:acc?C.accent:C.muted}));
+  });
+  T(s,12,206,'STD DEV ACROSS PALATES · SHORTER = STEADIER (NDCG IS STEADIEST)',mono({'font-size':8,fill:C.muted2}));
+}
+function m4_D(s){
+  s.setAttribute('viewBox','0 0 420 220');
+  const cards=[{k:'OUT-OF-SAMPLE',v:'Yes',d:'scored on reserved palates'},
+    {k:'SPREAD',v:'±0.049',d:'NDCG barely moves'},
+    {k:'COVERAGE',v:'98–100%',d:'broad, not a lucky few'}];
+  cards.forEach((c,i)=>{const y=20+i*64;
+    add(s,'line',{x1:20,y1:y+50,x2:400,y2:y+50,stroke:C.ink,opacity:.08});
+    T(s,20,y+18,c.k,mono({'font-size':9,fill:C.muted}));
+    T(s,20,y+44,c.v,{'font-family':FRAU,'font-size':26,fill:i===0?C.green:C.ink,'font-weight':300});
+    T(s,150,y+44,c.d,{'font-family':'Inter','font-size':13,fill:C.muted});
+  });
+  T(s,20,212,'GENERALIZATION READ FROM CONSISTENCY, NOT ONE SCORE',mono({'font-size':8,fill:C.muted2}));
+}
+
+/* ============================ Metric 5 renderers ============================ */
+function m5_A(s){
+  s.setAttribute('viewBox','0 0 420 230');
+  const A=[100,70],M=[320,70],D=[210,180];
+  function edge(p,q,val,acc){add(s,'line',{x1:p[0],y1:p[1],x2:q[0],y2:q[1],stroke:acc?C.accent:C.ink,opacity:acc?1:.28,'stroke-width':acc?2:1.3});}
+  edge(A,M,'0.283',false);edge(A,D,'0.308',false);edge(M,D,'0.335',true);
+  T(s,210,58,'0.283',mono({'font-size':10,fill:C.muted,'text-anchor':'middle'}));
+  T(s,145,132,'0.308',mono({'font-size':10,fill:C.muted,'text-anchor':'middle'}));
+  T(s,278,132,'0.335',Object.assign(mono({'font-size':10.5,fill:C.accent,'text-anchor':'middle'}),{}));
+  [['ATL',A],['MKE',M],['DAL',D]].forEach(([n,p])=>{
+    add(s,'circle',{cx:p[0],cy:p[1],r:20,fill:C.surface,stroke:C.ink,'stroke-width':1.4});
+    T(s,p[0],p[1]+4,n,mono({'font-size':10,fill:C.ink,'text-anchor':'middle','font-size':10}));
+  });
+  T(s,20,218,'LINE = PALATE DISTANCE · ACCENT = MOST DIVERGENT PAIR',mono({'font-size':8,fill:C.muted2}));
+}
+function m5_B(s){
+  s.setAttribute('viewBox','0 0 420 210');
+  const rows=[{n:'ATL ↔ MKE',v:0.2825,t:'most alike'},{n:'ATL ↔ DAL',v:0.3079,t:''},{n:'DAL ↔ MKE',v:0.3353,t:'most distinct',acc:1}];
+  const x0=120,x1=398,vmax=0.4;const X=v=>x0+(v/vmax)*(x1-x0);
+  [0,0.1,0.2,0.3,0.4].forEach(v=>{add(s,'line',{x1:X(v),y1:24,x2:X(v),y2:150,stroke:C.ink,opacity:.07});T(s,X(v),166,v.toFixed(1),mono({'text-anchor':'middle'}));});
+  rows.forEach((r,i)=>{const y=50+i*38;const acc=r.acc;
+    add(s,'rect',{x:x0,y:y-10,width:X(r.v)-x0,height:20,fill:acc?C.accent:C.muted,opacity:acc?1:.42,rx:2});
+    T(s,12,y+4,r.n,{'font-family':'Inter','font-size':12,fill:C.ink});
+    T(s,X(r.v)+7,y+4,r.v.toFixed(3),mono({'font-size':10,fill:acc?C.accent:C.muted}));
+  });
+  T(s,120,190,'JENSEN-SHANNON DIVERGENCE · MORE ALIKE ← → MORE DIFFERENT',mono({'font-size':8,fill:C.muted2}));
+}
+function m5_C(s){
+  s.setAttribute('viewBox','0 0 420 230');
+  const cities=['ATL','DAL','MKE'];
+  const J={'ATL-DAL':0.3079,'ATL-MKE':0.2825,'DAL-MKE':0.3353};
+  const ox=120,oy=40,cell=82;
+  cities.forEach((c,i)=>{T(s,ox+i*cell+cell/2,oy-12,c,mono({'font-size':10,fill:C.muted,'text-anchor':'middle'}));
+    T(s,ox-14,oy+i*cell+cell/2+4,c,Object.assign(mono({'font-size':10,fill:C.muted,'text-anchor':'end'}),{}));});
+  for(let r=0;r<3;r++)for(let c=0;c<3;c++){
+    const x=ox+c*cell,y=oy+r*cell;
+    let v=null;if(r!==c){const k=[cities[r],cities[c]].sort().join('-');v=J[k];}
+    const t=v===null?0:(v-0.25)/(0.12);const op=v===null?0:0.12+t*0.7;
+    add(s,'rect',{x,y,width:cell-4,height:cell-4,fill:v===null?C.paper2:C.accent,opacity:v===null?.4:op,stroke:C.line});
+    if(v!==null)T(s,x+(cell-4)/2,y+(cell-4)/2+4,v.toFixed(3),Object.assign(mono({'font-size':11,'text-anchor':'middle',fill:op>0.5?C.paper:C.ink}),{}));
+    else T(s,x+(cell-4)/2,y+(cell-4)/2+4,'·',mono({'font-size':14,'text-anchor':'middle',fill:C.muted2}));
+  }
+  T(s,120,oy+3*cell+20,'DARKER = MORE DIFFERENT PALATES',mono({'font-size':8,fill:C.muted2}));
+}
+function m5_D(s){
+  s.setAttribute('viewBox','0 0 420 200');
+  const x0=30,x1=398,vmax=0.4;const X=v=>x0+(v/vmax)*(x1-x0);
+  add(s,'line',{x1:x0,y1:110,x2:x1,y2:110,stroke:C.ink,opacity:.3});
+  [0,0.1,0.2,0.3,0.4].forEach(v=>{add(s,'line',{x1:X(v),y1:106,x2:X(v),y2:114,stroke:C.ink,opacity:.3});T(s,X(v),130,v.toFixed(1),mono({'text-anchor':'middle'}));});
+  const pts=[{n:'ATL–MKE',v:0.2825,dy:-1},{n:'ATL–DAL',v:0.3079,dy:1},{n:'DAL–MKE',v:0.3353,dy:-1,acc:1}];
+  pts.forEach(p=>{const acc=p.acc;add(s,'circle',{cx:X(p.v),cy:110,r:6,fill:acc?C.accent:C.muted});
+    const ly=p.dy<0?86:150;add(s,'line',{x1:X(p.v),y1:110,x2:X(p.v),y2:p.dy<0?92:128,stroke:acc?C.accent:C.muted,opacity:.4});
+    T(s,X(p.v),p.dy<0?80:148,p.n,mono({'font-size':9,fill:acc?C.accent:C.muted,'text-anchor':'middle'}));
+    T(s,X(p.v),p.dy<0?70:160,p.v.toFixed(3),Object.assign(mono({'font-size':9,fill:C.ink,'text-anchor':'middle'}),{}));});
+  T(s,30,190,'ALL THREE DISTANCES TO SCALE · CLUSTERED 0.28–0.34 (REAL BUT MODERATE)',mono({'font-size':8,fill:C.muted2}));
+}
+
+/* ============================ build DOM ============================ */
+const STORE_KEY='pvr_metric_picks_v1';
+let picks=JSON.parse(localStorage.getItem(STORE_KEY)||'{}'); // {metricId:[optId,...]}
+
+function tableHTML(d){
+  let h='<table class="data"><thead><tr>';
+  d.cols.forEach(c=>h+=`<th>${c}</th>`);h+='</tr></thead><tbody>';
+  d.rows.forEach(r=>{h+='<tr>';r.forEach(c=>{if(c&&c.t!==undefined)h+=`<td class="${c.acc?'acc':''}">${c.t}</td>`;else h+=`<td>${c}</td>`;});h+='</tr>';});
+  h+='</tbody></table>';return h;
+}
+function mkSvgInto(el,draw){const s=svg('0 0 420 220');el.appendChild(s);draw(s);}
+
+const host=document.getElementById('sections');
+METRICS.forEach(m=>{
+  const sec=document.createElement('section');sec.className='metric';sec.id=m.id;
+  const wrap=document.createElement('div');wrap.className='wrap';sec.appendChild(wrap);
+
+  // head
+  wrap.innerHTML=`
+    <div class="sec-head">
+      <div class="left">
+        <span class="eyebrow">Metric ${m.num}</span>
+        <h2 class="fr">${m.name}<span class="agree">${m.agree}</span></h2>
+        <p class="oneline">${m.oneLine}</p>
+      </div>
+      <div class="qcard">
+        <div class="lab">Business question</div>
+        <div class="q">${m.question}</div>
+        <div class="map">${m.headline}</div>
+      </div>
+    </div>
+    <div class="block-label">Original data <span class="tag">verbatim from the report</span></div>
+    <div class="twocol">
+      <div class="panel" id="${m.id}-data">
+        <div class="ptitle">${m.original?'The numbers':'The numbers'}</div>
+        <div class="psub">${m.data.sub}</div>
+        ${tableHTML(m.data)}
+        <div class="src">${m.data.src}</div>
+      </div>
+      <div class="panel" id="${m.id}-orig">
+        <div class="ptitle">${m.original.title}</div>
+        <div class="psub">${m.original.sub}</div>
+        <div id="${m.id}-origfig"></div>
+      </div>
+    </div>
+    <div class="block-label">Alternative views <span class="tag">styled for the one-pager · pick your favorite</span></div>
+    <div class="opts" id="${m.id}-opts"></div>
+    <div class="caveat"><div class="ct">Read this before you choose</div><p>${m.caveat}</p></div>
+  `;
+  host.appendChild(sec);
+
+  // original fig
+  mkSvgInto(document.getElementById(m.id+'-origfig'),m.original.draw);
+
+  // options
+  const optHost=document.getElementById(m.id+'-opts');
+  m.options.forEach(o=>{
+    const card=document.createElement('div');card.className='opt';card.dataset.metric=m.id;card.dataset.opt=o.id;
+    card.innerHTML=`
+      <div class="ohead"><span class="obadge"><span class="d"></span>Option ${o.id}</span></div>
+      <h3>${o.title}</h3>
+      <div id="${m.id}-${o.id}-fig"></div>
+      <div class="figcap">${o.cap}</div>
+      <div class="edu">${o.edu}</div>
+      <button class="pickbtn">Use this view</button>
+    `;
+    optHost.appendChild(card);
+    mkSvgInto(document.getElementById(`${m.id}-${o.id}-fig`),o.draw);
+    const btn=card.querySelector('.pickbtn');
+    function sync(){const sel=(picks[m.id]||[]).includes(o.id);card.classList.toggle('sel',sel);btn.textContent=sel?'✓ Selected':'Use this view';}
+    btn.addEventListener('click',()=>{
+      picks[m.id]=picks[m.id]||[];const idx=picks[m.id].indexOf(o.id);
+      if(idx>=0)picks[m.id].splice(idx,1);else picks[m.id].push(o.id);
+      if(!picks[m.id].length)delete picks[m.id];
+      localStorage.setItem(STORE_KEY,JSON.stringify(picks));sync();renderPanel();
+    });
+    sync();
+  });
+});
+
+/* ============================ selection panel ============================ */
+const fab=document.getElementById('selfab'),panel=document.getElementById('selpanel'),
+  cnt=document.getElementById('selcnt'),splist=document.getElementById('splist'),copied=document.getElementById('copied');
+fab.addEventListener('click',()=>panel.classList.toggle('open'));
+function totalPicks(){return Object.values(picks).reduce((a,b)=>a+b.length,0);}
+function renderPanel(){
+  cnt.textContent=totalPicks();
+  let h='';
+  METRICS.forEach(m=>{
+    const ps=(picks[m.id]||[]);
+    const labels=ps.map(id=>{const o=m.options.find(x=>x.id===id);return `Option ${id} — ${o?o.title:''}`;});
+    h+=`<div class="sp-m"><div class="mt">Metric ${m.num} · ${m.name}</div>
+      <div class="picks">${labels.length?labels.join('<br>'):'<span class="none">no pick yet</span>'}</div></div>`;
+  });
+  splist.innerHTML=h;
+}
+function summaryText(){
+  let lines=['PVR-150 metric gallery — my chosen views:',''];
+  METRICS.forEach(m=>{const ps=(picks[m.id]||[]);
+    const labels=ps.map(id=>{const o=m.options.find(x=>x.id===id);return `Option ${id} (${o?o.title:''})`;});
+    lines.push(`Metric ${m.num} — ${m.name}: ${labels.length?labels.join(', '):'(no pick)'}`);});
+  return lines.join('\n');
+}
+document.getElementById('copybtn').addEventListener('click',async()=>{
+  try{await navigator.clipboard.writeText(summaryText());}catch(e){
+    const ta=document.createElement('textarea');ta.value=summaryText();document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();}
+  copied.style.display='block';setTimeout(()=>copied.style.display='none',2200);
+});
+document.getElementById('clearbtn').addEventListener('click',()=>{
+  picks={};localStorage.removeItem(STORE_KEY);
+  document.querySelectorAll('.opt.sel').forEach(c=>{c.classList.remove('sel');c.querySelector('.pickbtn').textContent='Use this view';});
+  renderPanel();
+});
+renderPanel();
+</script>
+</body>
+</html>
