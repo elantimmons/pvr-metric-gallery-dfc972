@@ -96,6 +96,19 @@
   table.data tr:last-child td{border-bottom:none}
   .src{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--muted2);margin-top:12px;letter-spacing:.04em}
 
+  /* real report figure embed */
+  .reportfig{margin-top:6px;border:1px solid var(--line);border-radius:var(--r-md);overflow:hidden;background:#fff;position:relative}
+  .reportfig img{display:block;width:100%;height:auto}
+  .reportfig .rflabel{position:absolute;top:9px;left:9px;font-family:'JetBrains Mono',monospace;font-size:8.5px;
+     letter-spacing:.1em;text-transform:uppercase;color:var(--muted);background:rgba(255,255,255,.88);
+     padding:3px 8px;border-radius:5px;border:1px solid var(--line)}
+  .nochart{margin-top:8px;border:1px dashed var(--line);border-radius:var(--r-md);padding:30px 22px;text-align:center;
+     color:var(--muted);font-size:13px;line-height:1.5;background:var(--paper2)}
+  .nochart .nci{display:block;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;
+     text-transform:uppercase;color:var(--accent);margin-bottom:7px}
+  .orignote{margin-top:13px;font-size:12px;line-height:1.6;color:var(--ink2);background:rgba(122,46,31,0.06);
+     border-left:2px solid var(--accent);padding:10px 13px;border-radius:0 6px 6px 0}
+
   /* option grid */
   .opts{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
   @media(max-width:880px){.opts{grid-template-columns:1fr}}
@@ -287,9 +300,9 @@ const METRICS=[
   agree:'Agreement metric · Core Assumption Validation',
   question:'Do chemically similar products produce more similar consumer liking?',
   oneLine:'This is the foundation under everything else: it asks whether <b>chemistry is even a valid input</b> to predicting taste. If similar chemistries earn similar liking scores, the whole approach is justified.',
-  headline:'Headline number <b>20.4%</b> — the smaller liking gap among chemically similar products.',
+  headline:'Headline number <b>20.4%</b>, the smaller liking gap among chemically similar products.',
   data:{
-    sub:'Mean absolute difference in consumer liking score (scale 1–9) between product pairs, by how chemically similar the pair is. Smaller gap = chemistry tracks taste.',
+    sub:'Mean absolute difference in consumer liking score (scale 1-9) between product pairs, by how chemically similar the pair is. Smaller gap = chemistry tracks taste.',
     cols:['Threshold','Similar pairs (n)','Dissimilar pairs (n)','Mean gap: similar','Mean gap: dissimilar','Reduction','p-value'],
     rows:[
       ['Conservative','6','294','1.770','2.225',{t:'20.4% lower',acc:1},'3.9e-39'],
@@ -297,7 +310,7 @@ const METRICS=[
     ],
     src:'Source: PVR-150 report, Metric #1 table + Appendix C (Welch one-tailed t-test; t = -12.94 conservative, -8.48 permissive).'
   },
-  original:{title:'As the report showed it',sub:'A grouped bar chart of mean liking gaps with ~95% confidence-interval error bars, plus the table above. The exact CI values were not published with the data.',draw:o_m1},
+  original:{title:'As the report showed it',img:'report-metric1.png',sub:'The exact figure from the report Metric #1 section: a four-bar chart (similar vs dissimilar at each threshold) with ~95% confidence-interval error bars and callout boxes, in the navy/teal house style.'},
   options:[
     {id:'A',title:'Paired bars, gap highlighted',cap:'FIG 1A · MEAN LIKING GAP BY CHEMICAL SIMILARITY',draw:m1_A,
      edu:'The classic view: <b>similar pairs sit lower than dissimilar pairs</b> at both thresholds, and the drop is shaded in wine. Honest and familiar, but it asks the reader to eyeball the difference.'},
@@ -314,20 +327,20 @@ const METRICS=[
   id:'m2', num:'02', name:'Predictive Rank Concordance',
   agree:'Agreement metric · Predictive Rank Concordance',
   question:'Does the model put the products a palate will like near the top of its list?',
-  oneLine:'Product decisions are usually comparative — <b>which of these to prioritize</b>. This metric asks whether the model\'s ranked list puts the genuinely-liked products on top. The headline measure is NDCG.',
-  headline:'Headline number <b>0.928</b> — the NDCG ranking-quality score (1.0 would be a perfect ranking).',
+  oneLine:'Product decisions are usually comparative, <b>which of these to prioritize</b>. This metric asks whether the model\'s ranked list puts the genuinely-liked products on top. The headline measure is NDCG.',
+  headline:'Headline number <b>0.928</b>, the NDCG ranking-quality score (1.0 would be a perfect ranking).',
   data:{
     sub:'Four rank-agreement measures between the model\'s predicted order and the consumer\'s actual liking order, ranking 25 products per held-out palate. All run 0→1 where 1.0 is perfect.',
     cols:['Rank measure','Baseline value','Std. dev.','Approx. 95% interval','What it captures'],
     rows:[
-      ['NDCG@10',{t:'0.928',acc:1},'0.049','0.915 – 0.940','Are the best items near the top?'],
-      ['Spearman (no ties)','0.384','0.322','0.304 – 0.464','Overall order, ties broken'],
-      ['Kendall Tau-c','0.175','0.261','0.110 – 0.240','Pairwise order agreement'],
-      ['Kendall Tau-b','0.173','0.257','0.109 – 0.237','Pairwise, tie-adjusted'],
+      ['NDCG@10',{t:'0.928',acc:1},'0.049','0.915 to 0.940','Are the best items near the top?'],
+      ['Spearman (no ties)','0.384','0.322','0.304 to 0.464','Overall order, ties broken'],
+      ['Kendall Tau-c','0.175','0.261','0.110 to 0.240','Pairwise order agreement'],
+      ['Kendall Tau-b','0.173','0.257','0.109 to 0.237','Pairwise, tie-adjusted'],
     ],
     src:'Source: PVR-150 report, Metric #2 table + Appendix D.'
   },
-  original:{title:'As the report showed it',sub:'A four-row table of statistics. No chart — the reader has to know that NDCG is the one to watch and that the others are naturally lower.',draw:o_m2},
+  original:{title:'As the report showed it',img:'report-metric2.png',sub:'The exact figure from the report Metric #2 section: a horizontal bar chart of the four rank measures on a 0 to 1 axis, with NDCG highlighted by a callout.'},
   options:[
     {id:'A',title:'Ranked bars with intervals',cap:'FIG 2A · RANK MEASURES, 0→1 SCALE',draw:m2_A,
      edu:'All four measures as horizontal bars on the same 0→1 scale, NDCG leading in accent, each with its 95% interval. Shows the full picture and why <b>NDCG stands apart</b> from the stricter pairwise measures.'},
@@ -338,12 +351,12 @@ const METRICS=[
     {id:'D',title:'Forest plot of all four',cap:'FIG 2D · POINT ESTIMATE ± 95% INTERVAL',draw:m2_D,
      edu:'A clinical-style dot-and-interval plot. Compact and precise; signals scientific rigor. Reads best for the data-science reviewers rather than the executive skim.'},
   ],
-  caveat:'The Spearman and Kendall numbers look low next to NDCG, but that is expected: with only integer 1–9 ratings there are many ties, and exact pairwise order across 25 products is a far harder bar than "best items on top." Any executive view should make clear that <b>NDCG is the headline and the low pairwise numbers are not a weakness</b>. The report gives no random/null NDCG baseline for comparison.'
+  caveat:'The Spearman and Kendall numbers look low next to NDCG, but that is expected: with only integer 1-9 ratings there are many ties, and exact pairwise order across 25 products is a far harder bar than "best items on top." Any executive view should make clear that <b>NDCG is the headline and the low pairwise numbers are not a weakness</b>. The report gives no random/null NDCG baseline for comparison.'
 },
 {
   id:'m3', num:'03', name:'Precision & Recall at Positive Hedonic Threshold',
   agree:'Agreement metric · Precision & Recall at Positive Hedonic Threshold (≥7)',
-  question:'When the model says "a consumer will like this," is it right — and does it work for everyone?',
+  question:'When the model says "a consumer will like this," is it right, and does it work for everyone?',
   oneLine:'The most direct test of the product: <b>recommendation accuracy</b>. When the model recommends a product, how often is the consumer\'s rating actually positive, versus what random guessing would get? And does it find a hit for nearly every palate?',
   headline:'This single metric powers <b>two</b> headline numbers: <b>+16 pts</b> precision lift and <b>98-100%</b> palate coverage.',
   data:{
@@ -355,39 +368,40 @@ const METRICS=[
     ],
     src:'Source: PVR-150 report, Metric #3 table + Appendix E. F0.5 was the optimization metric (precision-weighted).'
   },
-  original:{title:'As the report showed it',sub:'A table titled "Predictive Model Accuracy baseline." Six numbers per row, with the key story — precision beating the random base rate — left for the reader to compute.',draw:o_m3},
+  original:{title:'As the report showed it',img:'report-metric3.png',sub:'The exact figure printed in the report Metric #3 section, reproduced as-is.',note:'Heads-up: in the source report this figure actually charts the regional Jensen-Shannon data (Metric #5), not precision and recall, even though its caption reads "Predictive Model Accuracy baseline." It looks like the wrong figure was pasted here. The precision and recall numbers appear only in the table at left.'},
   options:[
     {id:'A',title:'Precision vs random base rate',cap:'FIG 3A · MODEL PRECISION vs RANDOM',draw:m3_A,
      edu:'Model precision as a bar against a dashed "random" line at each threshold. The <b>gap above the line is the value the model adds</b>. Direct and credible.'},
     {id:'B',title:'Lift dumbbell',cap:'FIG 3B · BASE RATE → MODEL PRECISION',draw:m3_B,
      edu:'One line per threshold from the random base rate up to model precision, with <b>+16 pts</b> on the jump. The cleanest possible "here is what the model buys you" story.'},
     {id:'C',title:'100-recommendation pictograph',cap:'FIG 3C · OUT OF 100 RECOMMENDATIONS',draw:m3_C,
-     edu:'An icon array: of 100 strict-like recommendations, about <b>51 land vs ~35 by chance</b>. The most intuitive for a non-technical executive — no axis to read, just count the dots.'},
+     edu:'An icon array: of 100 strict-like recommendations, about <b>51 land vs ~35 by chance</b>. The most intuitive for a non-technical executive, no axis to read, just count the dots.'},
     {id:'D',title:'Coverage donut',cap:'FIG 3D · PALATES WITH A VALID MATCH',draw:m3_D,
-     edu:'Isolates the second headline number: the model found a liked product for <b>98–100% of held-out palates</b>. Important because a model can look accurate while only serving a few palates — this proves broad reach.'},
+     edu:'Isolates the second headline number: the model found a liked product for <b>98-100% of held-out palates</b>. Important because a model can look accurate while only serving a few palates, this proves broad reach.'},
     {id:'E',title:'Full scorecard, small multiples',cap:'FIG 3E · PRECISION · RECALL · F0.5 · COVERAGE',draw:m3_E,
      edu:'All four quality measures as mini-bars for both thresholds. The complete technical picture in one block; denser, best for an appendix or a data-savvy reader.'},
   ],
-  caveat:'This is the metric most worth getting right, because it carries two of the five headline numbers. An executive page should probably <b>split them</b>: one tile for "beats random by ~16 points" (accuracy) and one for "works for 98–100% of palates" (reach). Also note precision is higher at HD ≥ 6 (66%) than HD ≥ 7 (51%) simply because "broadly acceptable" is an easier target than "strongly liked."'
+  caveat:'This is the metric most worth getting right, because it carries two of the five headline numbers. An executive page should probably <b>split them</b>: one tile for "beats random by ~16 points" (accuracy) and one for "works for 98-100% of palates" (reach). Also note precision is higher at HD ≥ 6 (66%) than HD ≥ 7 (51%) simply because "broadly acceptable" is an easier target than "strongly liked."'
 },
 {
   id:'m4', num:'04', name:'Cross-Validation Stability / Holdout Generalization',
   agree:'Agreement metric · Cross-Validation Stability',
   question:'Does the model hold up on consumer palates it was never trained on?',
-  oneLine:'The whole point is to predict <b>future</b> consumers, not to describe the ones already measured. This metric checks that the model generalizes. It is the one metric with <b>no single score</b> — it is read from how consistently the other metrics hold up out-of-sample.',
-  headline:'No headline number in the report. The evidence is consistency: a tight NDCG spread (±0.049) and 98–100% coverage on <i>reserved</i> palates.',
+  oneLine:'The whole point is to predict <b>future</b> consumers, not to describe the ones already measured. This metric checks that the model generalizes. It is the one metric with <b>no single score</b>, it is read from how consistently the other metrics hold up out-of-sample.',
+  headline:'No headline number in the report. The evidence is consistency: a tight NDCG spread (±0.049) and 98-100% coverage on <i>reserved</i> palates.',
   data:{
-    sub:'There is no standalone results table. Generalization is evidenced by the dispersion of the already-reported metrics, measured on a reserved validation set held out of model fitting.',
-    cols:['Evidence of generalization','Reading','Value'],
+    title:'What the report listed',
+    sub:'The report gives no numeric results table for this metric. It presents a conceptual table mapping each validation element to its business interpretation, reproduced verbatim below.',
+    cols:['Baseline validation element','Business interpretation'],
     rows:[
-      ['Evaluated on reserved palates','Out-of-sample, not training data','yes'],
-      ['NDCG spread across palates','Tight = consistent behavior',{t:'±0.049',acc:1}],
-      ['NDCG 95% interval','Narrow band','0.915 – 0.940'],
-      ['Coverage on reserved palates','Broad, not a lucky few',{t:'98–100%',acc:1}],
+      ['Reserved validation structure','Evaluates model behavior outside the fitting data.'],
+      ['Recommendation-performance dispersion','Indicates how consistently the model performs across validation palates.'],
+      ['Rank-metric dispersion','Shows whether ranking behavior is broadly stable or concentrated in a narrow subset of palates.'],
+      ['PVR-150 benchmark values','Establish the reference point for later PVR-300 comparison.'],
     ],
-    src:'Source: PVR-150 report, Metric #4 (conceptual table) + std-dev / coverage figures from Metrics #2–3.'
+    src:'Source: PVR-150 report, Metric #4 Cross-Validation Stability (conceptual table, verbatim).'
   },
-  original:{title:'As the report showed it',sub:'A conceptual table of "validation elements" and their business interpretation — no chart, and no single number. Easy for an executive to skim past entirely.',draw:o_m4},
+  original:{title:'As the report showed it',img:null,sub:'The report presented Metric #4 with no chart at all, only the conceptual table shown at left. With no number and no figure, it is the easiest metric to skip on a read-through.'},
   options:[
     {id:'A',title:'Stability band',cap:'FIG 4A · NDCG 0.928 ± 0.049 ACROSS PALATES',draw:m4_A,
      edu:'Shows the NDCG result as a <b>tight band on a 0→1 scale</b>: the model scores ~0.93 and barely moves from palate to palate. A narrow band is the visual proof of "consistent, not lucky."'},
@@ -398,14 +412,14 @@ const METRICS=[
     {id:'D',title:'Generalization scorecard',cap:'FIG 4D · OUT-OF-SAMPLE READOUT',draw:m4_D,
      edu:'Restates the borrowed evidence as a tidy three-stat card: <b>out-of-sample, tight spread, broad coverage</b>. Best if you want Metric 4 to feel like a real, presentable result instead of a footnote.'},
   ],
-  caveat:'This is the clearest gap for an executive audience. Metric 4 is genuinely important — it is what separates "prediction" from "describing old data" — yet the report gives it <b>no number and no chart</b>, so it disappears on a skim. My recommendation: give it a real visual in the final report (Option A or D) rather than letting it vanish, and consider asking the science team for a single summary statistic for it.'
+  caveat:'This is the clearest gap for an executive audience. Metric 4 is genuinely important, it is what separates "prediction" from "describing old data", yet the report gives it <b>no number and no chart</b>, so it disappears on a skim. My recommendation: give it a real visual in the final report (Option A or D) rather than letting it vanish, and consider asking the science team for a single summary statistic for it.'
 },
 {
   id:'m5', num:'05', name:'Population Segmentation Convergence',
   agree:'Agreement metric · Population Segmentation Convergence',
   question:'Are the taste profiles of different regions measurably different?',
   oneLine:'The seed of regional strategy: can the model <b>tell markets apart</b> by predicted palate? It compares the taste distribution of three cities and measures how far apart each pair is.',
-  headline:'Headline number <b>3 markets</b> — Atlanta, Dallas and Milwaukee, with measurable palate differences.',
+  headline:'Headline number <b>3 markets</b>, Atlanta, Dallas and Milwaukee, with measurable palate differences.',
   data:{
     sub:'Jensen-Shannon divergence between each pair of cities\' predicted palate distributions. 0 = identical, higher = more different. Lower numbers mean the two markets have more similar tastes.',
     cols:['Market pair','Mean JSD','Median','Std. dev.','Reading'],
@@ -414,75 +428,22 @@ const METRICS=[
       ['Atlanta ↔ Dallas','0.3079','0.3132','0.0641','middle'],
       ['Dallas ↔ Milwaukee',{t:'0.3353',acc:1},'0.3397','0.0638','most distinct'],
     ],
-    src:'Source: PVR-150 report, Metric #5 table + Appendix G. Palate space = 3^k for k=5–8 (243 to 6,561 palates).'
+    src:'Source: PVR-150 report, Metric #5 table + Appendix G. Palate space = 3^k for k=5-8 (243 to 6,561 palates).'
   },
-  original:{title:'As the report showed it',sub:'A three-row table of divergence statistics. The relationship between the cities — who is close to whom — is hard to see in a list of decimals.',draw:o_m5},
+  original:{title:'As the report showed it',img:'report-metric5.png',sub:'The figure in the report Metric #5 section: a line chart of how divergence grows as the palate space becomes more granular (k = 5 to 8 questions). The pairwise city table is at left.',note:'Note: the bar chart that directly visualizes the pairwise city distances at left was, in the source report, printed up in the Metric #3 section rather than here.'},
   options:[
     {id:'A',title:'Market network',cap:'FIG 5A · PALATE DISTANCE BETWEEN MARKETS',draw:m5_A,
-     edu:'The three cities as nodes; each connecting line is their palate distance, the <b>most divergent pair drawn in accent</b>. Shows the whole relationship at a glance — Atlanta and Milwaukee closest, Dallas and Milwaukee farthest.'},
+     edu:'The three cities as nodes; each connecting line is their palate distance, the <b>most divergent pair drawn in accent</b>. Shows the whole relationship at a glance, Atlanta and Milwaukee closest, Dallas and Milwaukee farthest.'},
     {id:'B',title:'Sorted distance bars',cap:'FIG 5B · PAIRWISE DIVERGENCE, RANKED',draw:m5_B,
      edu:'The three pairs as bars on a "more alike → more different" axis. The plainest read of <b>which markets differ most</b>, and by how much.'},
     {id:'C',title:'Distance matrix',cap:'FIG 5C · CITY × CITY DIVERGENCE',draw:m5_C,
      edu:'A shaded 3×3 grid, like a familiar correlation table: darker = more different. Scales naturally if more markets are added later, and executives recognize the format instantly.'},
     {id:'D',title:'Number line',cap:'FIG 5D · ALL THREE DISTANCES, TO SCALE',draw:m5_D,
-     edu:'All three values placed on one 0→0.4 line. Makes the honest point that the differences are <b>real but moderate and tightly clustered</b> (0.28–0.34), not dramatic — useful context for strategy.'},
+     edu:'All three values placed on one 0→0.4 line. Makes the honest point that the differences are <b>real but moderate and tightly clustered</b> (0.28-0.34), not dramatic, useful context for strategy.'},
   ],
   caveat:'Two honesty notes for the final report: this baseline says markets <b>are different</b>, it is not yet a "convergence" claim, and the differences are moderate. Also, this metric comes from <b>intake-survey responses, not actual tastings</b>, a distinction the report draws but a one-pager could easily blur. The report reports spread (std dev) but no formal significance test that the cities differ.'
 },
 ];
-
-/* ============================ original-display renderers ============================ */
-function o_m1(s){m1_A(s,true);}
-function o_m2(s){ // simple stat table look
-  s.setAttribute('viewBox','0 0 420 200');
-  const rows=[['NDCG@10','0.928'],['Spearman','0.384'],['Kendall Tau-c','0.175'],['Kendall Tau-b','0.173']];
-  T(s,12,26,'PREDICTIVE RANK CONCORDANCE',mono({'font-size':10,fill:C.muted}));
-  add(s,'line',{x1:12,y1:38,x2:408,y2:38,stroke:C.ink,opacity:.2});
-  rows.forEach((r,i)=>{const y=66+i*32;
-    T(s,12,y,r[0],{'font-family':'Inter','font-size':13,fill:C.ink});
-    T(s,408,y,r[1],Object.assign(mono({'font-size':13,fill:i===0?C.accent:C.ink}),{'text-anchor':'end'}));
-    add(s,'line',{x1:12,y1:y+12,x2:408,y2:y+12,stroke:C.ink,opacity:.06});
-  });
-  T(s,12,190,'AS A TABLE — NDCG IS THE ONE TO WATCH, BUT NOTHING SAYS SO',mono({'font-size':8,fill:C.muted2}));
-}
-function o_m3(s){
-  s.setAttribute('viewBox','0 0 420 200');
-  const head=['','PREC','RECALL','COVER'];const rows=[['HD≥7','51%','55%','98%'],['HD≥6','66%','53%','100%']];
-  const xs=[14,200,290,380];
-  head.forEach((h,i)=>T(s,xs[i],24,h,Object.assign(mono({'font-size':9,fill:C.muted2}),{'text-anchor':i?'end':'start'})));
-  add(s,'line',{x1:12,y1:34,x2:408,y2:34,stroke:C.ink,opacity:.2});
-  rows.forEach((r,ri)=>{const y=62+ri*34;
-    r.forEach((c,ci)=>T(s,xs[ci],y,c,Object.assign(ci?mono({'font-size':13,fill:C.ink}):{'font-family':'Inter','font-size':13,fill:C.ink},{'text-anchor':ci?'end':'start'})));
-    add(s,'line',{x1:12,y1:y+12,x2:408,y2:y+12,stroke:C.ink,opacity:.06});
-  });
-  T(s,14,150,'BASE RATE 34.58% / 49.81%  ·  LIFT +16 pts',mono({'font-size':9,fill:C.muted}));
-  T(s,12,190,'AS A TABLE — THE READER HAS TO SUBTRACT TO SEE THE LIFT',mono({'font-size':8,fill:C.muted2}));
-}
-function o_m4(s){
-  s.setAttribute('viewBox','0 0 420 200');
-  const rows=[['Reserved validation structure','Tests behavior outside fitting data'],
-    ['Performance dispersion','How consistent across palates'],
-    ['Rank-metric dispersion','Stable or concentrated?'],
-    ['Benchmark values','Reference point for PVR-300']];
-  rows.forEach((r,i)=>{const y=34+i*40;
-    add(s,'circle',{cx:20,cy:y-4,r:3,fill:C.accent});
-    T(s,34,y,r[0],{'font-family':'Inter','font-size':12.5,fill:C.ink,'font-weight':500});
-    T(s,34,y+16,r[1],{'font-family':'Inter','font-size':11.5,fill:C.muted});
-  });
-  T(s,12,196,'AS A CONCEPT TABLE — NO NUMBER, EASY TO SKIP',mono({'font-size':8,fill:C.muted2}));
-}
-function o_m5(s){
-  s.setAttribute('viewBox','0 0 420 200');
-  const head=['PAIR','MEAN JSD','MEDIAN','SD'];const xs=[14,250,330,405];
-  const rows=[['ATL–MKE','0.2825','0.2787','0.073'],['ATL–DAL','0.3079','0.3132','0.064'],['DAL–MKE','0.3353','0.3397','0.064']];
-  head.forEach((h,i)=>T(s,xs[i],24,h,Object.assign(mono({'font-size':9,fill:C.muted2}),{'text-anchor':i?'end':'start'})));
-  add(s,'line',{x1:12,y1:34,x2:408,y2:34,stroke:C.ink,opacity:.2});
-  rows.forEach((r,ri)=>{const y=62+ri*34;
-    r.forEach((c,ci)=>T(s,xs[ci],y,c,Object.assign(ci?mono({'font-size':12.5,fill:C.ink}):{'font-family':'Inter','font-size':12.5,fill:C.ink},{'text-anchor':ci?'end':'start'})));
-    add(s,'line',{x1:12,y1:y+12,x2:408,y2:y+12,stroke:C.ink,opacity:.06});
-  });
-  T(s,12,192,'AS A TABLE — HARD TO SEE WHICH CITIES ARE CLOSE',mono({'font-size':8,fill:C.muted2}));
-}
 
 /* ============================ Metric 1 renderers ============================ */
 function m1_A(s,plain){
@@ -525,7 +486,7 @@ function m1_B(s){
   });
   T(s,X(1.770),54,'similar',mono({'font-size':8,fill:C.accent,'text-anchor':'middle'}));
   T(s,X(2.225),54,'dissimilar',mono({'font-size':8,fill:C.muted2,'text-anchor':'middle'}));
-  T(s,12,192,'MEAN LIKING GAP (1–9 SCALE) · LEFT = MORE ALIKE',mono({'font-size':8,fill:C.muted2}));
+  T(s,12,192,'MEAN LIKING GAP (1-9 SCALE) · LEFT = MORE ALIKE',mono({'font-size':8,fill:C.muted2}));
 }
 function m1_C(s){
   s.setAttribute('viewBox','0 0 420 220');
@@ -678,7 +639,7 @@ function m3_D(s){
   add(s,'circle',{cx,cy,r,fill:'none',stroke:C.line,'stroke-width':13});
   add(s,'circle',{cx,cy,r,fill:'none',stroke:C.accent,'stroke-width':13,'stroke-linecap':'round',
     'stroke-dasharray':circ,'stroke-dashoffset':circ*(1-val),transform:`rotate(-90 ${cx} ${cy})`});
-  T(s,cx,cy-4,'98–100%',{'font-family':FRAU,'font-size':27,fill:C.ink,'text-anchor':'middle','font-weight':300});
+  T(s,cx,cy-4,'98-100%',{'font-family':FRAU,'font-size':27,fill:C.ink,'text-anchor':'middle','font-weight':300});
   T(s,cx,cy+18,'OF PALATES',mono({'font-size':9,fill:C.muted2,'text-anchor':'middle'}));
   T(s,250,96,'Every held-out',{'font-family':'Inter','font-size':14,fill:C.muted});
   T(s,250,116,'palate gets a',{'font-family':'Inter','font-size':14,fill:C.muted});
@@ -732,7 +693,7 @@ function m4_B(s){
   add(s,'path',{d:'M242 104 l-9 -5 v10 z',fill:C.ink});
   T(s,210,96,'SCORE',mono({'font-size':8,fill:C.muted,'text-anchor':'middle'}));
   T(s,210,118,'HERE',mono({'font-size':8,fill:C.muted,'text-anchor':'middle'}));
-  T(s,321,176,'NDCG 0.928 · COVERAGE 98–100%',mono({'font-size':9,fill:C.ink,'text-anchor':'middle'}));
+  T(s,321,176,'NDCG 0.928 · COVERAGE 98-100%',mono({'font-size':9,fill:C.ink,'text-anchor':'middle'}));
   T(s,24,202,'GENERALIZATION = SCORED ON DATA IT NEVER TRAINED ON',mono({'font-size':8,fill:C.muted2}));
 }
 function m4_C(s){
@@ -751,7 +712,7 @@ function m4_D(s){
   s.setAttribute('viewBox','0 0 420 220');
   const cards=[{k:'OUT-OF-SAMPLE',v:'Yes',d:'scored on reserved palates'},
     {k:'SPREAD',v:'±0.049',d:'NDCG barely moves'},
-    {k:'COVERAGE',v:'98–100%',d:'broad, not a lucky few'}];
+    {k:'COVERAGE',v:'98-100%',d:'broad, not a lucky few'}];
   cards.forEach((c,i)=>{const y=20+i*64;
     add(s,'line',{x1:20,y1:y+50,x2:400,y2:y+50,stroke:C.ink,opacity:.08});
     T(s,20,y+18,c.k,mono({'font-size':9,fill:C.muted}));
@@ -810,12 +771,12 @@ function m5_D(s){
   const x0=30,x1=398,vmax=0.4;const X=v=>x0+(v/vmax)*(x1-x0);
   add(s,'line',{x1:x0,y1:110,x2:x1,y2:110,stroke:C.ink,opacity:.3});
   [0,0.1,0.2,0.3,0.4].forEach(v=>{add(s,'line',{x1:X(v),y1:106,x2:X(v),y2:114,stroke:C.ink,opacity:.3});T(s,X(v),130,v.toFixed(1),mono({'text-anchor':'middle'}));});
-  const pts=[{n:'ATL–MKE',v:0.2825,dy:-1},{n:'ATL–DAL',v:0.3079,dy:1},{n:'DAL–MKE',v:0.3353,dy:-1,acc:1}];
+  const pts=[{n:'ATL-MKE',v:0.2825,dy:-1},{n:'ATL-DAL',v:0.3079,dy:1},{n:'DAL-MKE',v:0.3353,dy:-1,acc:1}];
   pts.forEach(p=>{const acc=p.acc;add(s,'circle',{cx:X(p.v),cy:110,r:6,fill:acc?C.accent:C.muted});
     const ly=p.dy<0?86:150;add(s,'line',{x1:X(p.v),y1:110,x2:X(p.v),y2:p.dy<0?92:128,stroke:acc?C.accent:C.muted,opacity:.4});
     T(s,X(p.v),p.dy<0?80:148,p.n,mono({'font-size':9,fill:acc?C.accent:C.muted,'text-anchor':'middle'}));
     T(s,X(p.v),p.dy<0?70:160,p.v.toFixed(3),Object.assign(mono({'font-size':9,fill:C.ink,'text-anchor':'middle'}),{}));});
-  T(s,30,190,'ALL THREE DISTANCES TO SCALE · CLUSTERED 0.28–0.34 (REAL BUT MODERATE)',mono({'font-size':8,fill:C.muted2}));
+  T(s,30,190,'ALL THREE DISTANCES TO SCALE · CLUSTERED 0.28-0.34 (REAL BUT MODERATE)',mono({'font-size':8,fill:C.muted2}));
 }
 
 /* ============================ build DOM ============================ */
@@ -852,7 +813,7 @@ METRICS.forEach(m=>{
     <div class="block-label">Original data <span class="tag">verbatim from the report</span></div>
     <div class="twocol">
       <div class="panel" id="${m.id}-data">
-        <div class="ptitle">${m.original?'The numbers':'The numbers'}</div>
+        <div class="ptitle">${m.data.title||'The numbers'}</div>
         <div class="psub">${m.data.sub}</div>
         ${tableHTML(m.data)}
         <div class="src">${m.data.src}</div>
@@ -860,7 +821,8 @@ METRICS.forEach(m=>{
       <div class="panel" id="${m.id}-orig">
         <div class="ptitle">${m.original.title}</div>
         <div class="psub">${m.original.sub}</div>
-        <div id="${m.id}-origfig"></div>
+        ${m.original.img?`<div class="reportfig"><span class="rflabel">From the PVR-150 report</span><img src="${m.original.img}" alt="Report figure: ${m.name}" loading="lazy"></div>`:`<div class="nochart"><span class="nci">No figure in the report</span>This metric had no chart in the report, only the table shown at left.</div>`}
+        ${m.original.note?`<div class="orignote">${m.original.note}</div>`:''}
       </div>
     </div>
     <div class="block-label">Alternative views <span class="tag">styled for the one-pager · pick your favorite</span></div>
@@ -868,9 +830,6 @@ METRICS.forEach(m=>{
     <div class="caveat"><div class="ct">Read this before you choose</div><p>${m.caveat}</p></div>
   `;
   host.appendChild(sec);
-
-  // original fig
-  mkSvgInto(document.getElementById(m.id+'-origfig'),m.original.draw);
 
   // options
   const optHost=document.getElementById(m.id+'-opts');
@@ -908,17 +867,17 @@ function renderPanel(){
   let h='';
   METRICS.forEach(m=>{
     const ps=(picks[m.id]||[]);
-    const labels=ps.map(id=>{const o=m.options.find(x=>x.id===id);return `Option ${id} — ${o?o.title:''}`;});
+    const labels=ps.map(id=>{const o=m.options.find(x=>x.id===id);return `Option ${id}, ${o?o.title:''}`;});
     h+=`<div class="sp-m"><div class="mt">Metric ${m.num} · ${m.name}</div>
       <div class="picks">${labels.length?labels.join('<br>'):'<span class="none">no pick yet</span>'}</div></div>`;
   });
   splist.innerHTML=h;
 }
 function summaryText(){
-  let lines=['PVR-150 metric gallery — my chosen views:',''];
+  let lines=['PVR-150 metric gallery, my chosen views:',''];
   METRICS.forEach(m=>{const ps=(picks[m.id]||[]);
     const labels=ps.map(id=>{const o=m.options.find(x=>x.id===id);return `Option ${id} (${o?o.title:''})`;});
-    lines.push(`Metric ${m.num} — ${m.name}: ${labels.length?labels.join(', '):'(no pick)'}`);});
+    lines.push(`Metric ${m.num}, ${m.name}: ${labels.length?labels.join(', '):'(no pick)'}`);});
   return lines.join('\n');
 }
 document.getElementById('copybtn').addEventListener('click',async()=>{
